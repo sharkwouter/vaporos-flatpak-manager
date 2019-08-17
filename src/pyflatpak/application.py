@@ -10,12 +10,12 @@ class application():
 
     def __get_info(self, remote, id):
         command = ["flatpak", "remote-info", "--user", remote, id]
-        line_number = 1
         for line in subprocess.check_output(command).splitlines():
-            if line_number == 2:
+            if " - " in line:
                 self.description = line
                 break
-            line_number += 1
+        if not self.description:
+            self.description = id
         print(self.description)
 
     def __str__(self):

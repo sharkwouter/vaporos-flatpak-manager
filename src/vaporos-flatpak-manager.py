@@ -107,17 +107,29 @@ while running:
             print(event.button)
             if event.button == Button.A:
                 running = False
-        elif event.type == pygame.JOYAXISMOTION:
-                if event.axis == Axis.LHOR:
-                    if event.value > 0.5:
-                        print("right")
-                    elif event.value < -0.5:
-                        print("left")
-                elif event.axis == Axis.LVERT:
-                    if event.value > 0.5:
-                        print("down")
-                    elif event.value < -0.5:
-                        print("up")
+            elif event.button == Button.LB:
+                page -= 1
+                display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
+                pygame.display.update()
+                print("page: {}".format(page))
+            elif event.button == Button.RB:
+                page += 1
+                display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
+                pygame.display.update()
+                print("page: {}".format(page))
+            elif event.button == Button.SEL:
+                running = False
+        elif event.type == pygame.JOYHATMOTION:
+            if event.value == (0, 1):
+                selected -= 1
+            elif event.value == (0, -1):
+                selected += 1
+
+
+    if selected < 0:
+        selected = 4
+    elif selected > 4:
+        selected = 0
 
     draw_application_buttons(page, selected, grid_size)
 
