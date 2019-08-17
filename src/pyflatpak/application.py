@@ -3,20 +3,23 @@ import subprocess
 
 class application():
 
-    def __init__(self, id, remote):
+    def __init__(self, id, remote, description=""):
         self.__remote = remote
         self.__id = id
-        self.description = ""
+        self.__description = description
 
-    def __get_info(self, remote, id):
+    def __get_description(self, remote, id):
+        if self.__description:
+            return self.__description
+
         command = ["flatpak", "remote-info", "--user", remote, id]
         for line in subprocess.check_output(command).splitlines():
             if " - " in line:
-                self.description = line
+                self.__description = line
                 break
-        if not self.description:
-            self.description = id
-        print(self.description)
+        if not self.__description:
+            self.__description = id
+        return self.__description
 
     def install(self):
         return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.__remote, self.__id])
@@ -31,6 +34,4 @@ class application():
         print("{} was successfully uninstalled".format(self.__id))
 
     def __str__(self):
-        if not self.description:
-            self.__get_info(self.__remote, self.__id)
-        return self.description
+        return self.__get_description(self.__remote, self.__id)
