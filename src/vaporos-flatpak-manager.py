@@ -49,9 +49,9 @@ def display_text( text, x, y, size, text_color=Color.GREEN, font=Font.REGULAR):
     text_rectangle.center = (x, y)
     screen.blit(text_surface, text_rectangle)
 
-def draw_application_buttons(page, selected, grid_size):
-    page_offset = page*5
-    for index in range(0, 5):
+def draw_application_buttons(page, page_size, selected, grid_size):
+    page_offset = page*page_size
+    for index in range(0, page_size):
         font = Font.REGULAR
         if index == selected:
             font = Font.BOLD
@@ -85,7 +85,8 @@ grid_size = screen_width/32
 # Timer to be able to lock fps
 clock = pygame.time.Clock()
 
-page = 0
+page_size = 5
+page = 129
 selected = 0
 
 draw_loading_screen(screen, screen_width, screen_height, grid_size)
@@ -104,22 +105,21 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
         elif event.type == pygame.JOYBUTTONDOWN:
-            print(event.button)
             if event.button == Button.A:
                 display_text("Installing...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
-                application_list[page*5+selected].install()
+                application_list[page*page_size+selected].install()
             if event.button == Button.X:
                 display_text("Uninstalling...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
-                application_list[page*5+selected].uninstall()
+                application_list[page*page_size+selected].uninstall()
             elif event.button == Button.LB and page > 0:
                 page -= 1
                 display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
                 selected = 0
                 print("page: {}".format(page))
-            elif event.button == Button.RB:
+            elif event.button == Button.RB and page < len(application_list)/page_size-1:
                 page += 1
                 display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
@@ -139,7 +139,7 @@ while running:
     elif selected > 4:
         selected = 0
 
-    draw_application_buttons(page, selected, grid_size)
+    draw_application_buttons(page, page_size, selected, grid_size)
 
     # Draw grid, for testing purposes
     for y in range(0, screen_height, grid_size):
