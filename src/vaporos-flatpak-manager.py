@@ -106,9 +106,13 @@ while running:
         elif event.type == pygame.JOYBUTTONDOWN:
             print(event.button)
             if event.button == Button.A:
-                display_text("installing...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
+                display_text("Installing...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
                 application_list[page*5+selected].install()
+            if event.button == Button.X:
+                display_text("Uninstalling...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
+                pygame.display.update()
+                application_list[page*5+selected].uninstall()
             elif event.button == Button.LB and page > 0:
                 page -= 1
                 display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)

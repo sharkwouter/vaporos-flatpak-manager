@@ -24,6 +24,12 @@ class application():
             raise Exception("Error: Failed to install application {}".format(self.__id))
         print("{} was successfully installed".format(self.__id))
 
+    def uninstall(self):
+        return_value = subprocess.call(["flatpak", "uninstall", "--user", "-y", self.__id])
+        if return_value != 0:
+            raise Exception("Error: Failed to uninstall application {}".format(self.__id))
+        print("{} was successfully uninstalled".format(self.__id))
+
     def __str__(self):
         if not self.description:
             self.__get_info(self.__remote, self.__id)
