@@ -1,0 +1,37 @@
+Source: vaporos-flatpak-manager
+Section: admin
+Priority: optional
+Maintainer: Wouter Wijsman <wwijsman@live.nl>
+Build-Depends: debhelper (>= 11), dh-python, python-all, python-setuptools, python3-all, python3-setuptools
+Standards-Version: 4.3.0
+Homepage: http://vaporos.net/
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.2
+#Testsuite: autopkgtest-pkg-python
+
+Package: python-vaporos-flatpak-manager
+Architecture: all
+Depends: ${python:Depends}, ${misc:Depends}, flatpak
+Suggests: python-vaporos-flatpak-manager-doc
+Description: <insert up to 60 chars description> (Python 2)
+ <insert long description, indented with spaces>
+ .
+ This package installs the library for Python 2.
+
+Package: python3-vaporos-flatpak-manager
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, flatpak
+Suggests: python-vaporos-flatpak-manager-doc
+Description: <insert up to 60 chars description> (Python 3)
+ <insert long description, indented with spaces>
+ .
+ This package installs the library for Python 3.
+
+Package: python-vaporos-flatpak-manager-doc
+Architecture: all
+Section: doc
+Depends: ${sphinxdoc:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description> (common documentation)
+ <insert long description, indented with spaces>
+ .
+ This is the common documentation package.
