@@ -18,6 +18,12 @@ class application():
             self.description = id
         print(self.description)
 
+    def install(self):
+        return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.__remote, self.__id])
+        if return_value != 0:
+            raise Exception("Error: Failed to install application {}".format(self.__id))
+        print("{} was successfully installed".format(self.__id))
+
     def __str__(self):
         if not self.description:
             self.__get_info(self.__remote, self.__id)

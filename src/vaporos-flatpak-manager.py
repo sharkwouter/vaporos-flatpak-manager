@@ -53,7 +53,7 @@ def draw_application_buttons(page, selected, grid_size):
     page_offset = page*5
     for index in range(0, 5):
         font = Font.REGULAR
-        if index-page_offset == selected:
+        if index == selected:
             font = Font.BOLD
 
         if page_offset+index < len(application_list):
@@ -86,7 +86,7 @@ grid_size = screen_width/32
 clock = pygame.time.Clock()
 
 page = 0
-selected = 1
+selected = 0
 
 draw_loading_screen(screen, screen_width, screen_height, grid_size)
 
@@ -106,16 +106,20 @@ while running:
         elif event.type == pygame.JOYBUTTONDOWN:
             print(event.button)
             if event.button == Button.A:
-                running = False
-            elif event.button == Button.LB:
+                display_text("installing...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
+                pygame.display.update()
+                application_list[page*5+selected].install()
+            elif event.button == Button.LB and page > 0:
                 page -= 1
                 display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
+                selected = 0
                 print("page: {}".format(page))
             elif event.button == Button.RB:
                 page += 1
                 display_text("Loading", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
+                selected = 0
                 print("page: {}".format(page))
             elif event.button == Button.SEL:
                 running = False
