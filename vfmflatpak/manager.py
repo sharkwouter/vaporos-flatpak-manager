@@ -12,6 +12,9 @@ class manager():
         self.__application_list = self.__generate_application_list(remote_name)
         self.__application_list.sort()
 
+        print(self.__application_list)
+        print(self.__installed_list)
+
     def __add_remote(self, remote_name, remote_url):
         return_value = subprocess.call(["flatpak", "remote-add", "--user", "--if-not-exists", remote_name, remote_url])
         if return_value != 0:
@@ -27,20 +30,20 @@ class manager():
                 if line_number == 1:
                     line_number += 1
                     continue
-                name_description, id, version, branch = line.split("\t", 3)
-                print(name_description)
+                name_description, flatpak_id, version, branch = line.split("\t", 3)
                 if "-" in name_description:
                     name, description = name_description.split("-", 1)
                 else:
                     name = line.split(".")[-1]
                     description = ""
 
-                installed = (id in self.__installed_list)
-                application = vfmflatpak.application(id, remote_name, name, installed, description, version=version)
+                installed = (flatpak_id in self.__installed_list)
+                application = vfmflatpak.application(flatpak_id, remote_name, name, installed, description, version=version)
             else:
-                name = line.split(".")[-1]
-                installed = (line in self.__installed_list)
-                application = vfmflatpak.application(line, remote_name, name, installed)
+                flatpak_id = line.strip()
+                name = flatpak_id.split(".")[-1]
+                installed = (flatpak_id in self.__installed_list)
+                application = vfmflatpak.application(flatpak_id, remote_name, name, installed)
 
             application_list.append(application)
             line_number += 1
@@ -56,10 +59,11 @@ class manager():
                 if line_number == 1:
                     line_number += 1
                     continue
-                name_description, id, version, branch, arch, origin = line.split("\t", 5)
-                installed_list.append(id)
+                name_description, flatpak_id, version, branch, arch, origin = line.split("\t", 5)
+                installed_list.append(flatpak_id)
             else:
-                installed_list.append(line)
+                flatpak_id = line.strip()
+                installed_list.append(flatpak_id)
             line_number += 1
         return installed_list
 
