@@ -220,7 +220,7 @@ class gui:
         pygame.draw.line(self.__screen, button_border_color, (rect_x+rect_width, rect_y), (rect_x+rect_width, rect_y+rect_height), 1)
 
         title = str(application)
-        self.__display_text(title, rect_x, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        self.__display_text(title, rect_x+self.__grid_size*0.5, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
 
 
     def change_page(self, change, selected=None):

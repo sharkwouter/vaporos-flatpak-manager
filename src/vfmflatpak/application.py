@@ -1,9 +1,11 @@
 import subprocess
 
+class Version():
+    UNKNOWN = "unknown"
 
 class application():
 
-    def __init__(self, id, remote, name, installed, description="", version="unknown"):
+    def __init__(self, id, remote, name, installed, description="", version=Version.UNKNOWN):
         self.id = id
         self.remote = remote
         self.name = name
@@ -29,7 +31,7 @@ class application():
         self.installed = False
 
     def __str__(self):
-        return self.name
+        return self.name.title()
 
     def __repr__(self):
         return self.name
