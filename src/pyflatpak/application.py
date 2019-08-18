@@ -3,35 +3,30 @@ import subprocess
 
 class application():
 
-    def __init__(self, id, remote, description=""):
-        self.__remote = remote
-        self.__id = id
-        self.__description = description
+    def __init__(self, id, remote, name, installed, description="", version="unknown"):
+        self.id = id
+        self.remote = remote
+        self.name = name
+        self.description = description
+        self.version = version
+        self.installed = installed
 
-    def __get_description(self, remote, id):
-        if self.__description:
-            return self.__description
-
-        command = ["flatpak", "remote-info", "--user", remote, id]
-        for line in subprocess.check_output(command).splitlines():
-            if " - " in line:
-                self.__description = line
-                break
-        if not self.__description:
-            self.__description = id
-        return self.__description
+        if not self.description:
+            self.description = self.id
 
     def install(self):
-        return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.__remote, self.__id])
+        return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.remote, self.id])
         if return_value != 0:
-            raise Exception("Error: Failed to install application {}".format(self.__id))
-        print("{} was successfully installed".format(self.__id))
+            raise Exception("Error: Failed to install application {}".format(self.id))
+        print("{} was successfully installed".format(self.id))
+        self.installed = True
 
     def uninstall(self):
-        return_value = subprocess.call(["flatpak", "uninstall", "--user", "-y", self.__id])
+        return_value = subprocess.call(["flatpak", "uninstall", "--user", "-y", self.id])
         if return_value != 0:
-            raise Exception("Error: Failed to uninstall application {}".format(self.__id))
-        print("{} was successfully uninstalled".format(self.__id))
+            raise Exception("Error: Failed to uninstall application {}".format(self.id))
+        print("{} was successfully uninstalled".format(self.id))
+        self.installed = False
 
     def __str__(self):
-        return self.__get_description(self.__remote, self.__id)
+        return "{} - {}".format(self.name, self.description)

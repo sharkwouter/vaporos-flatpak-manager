@@ -56,8 +56,12 @@ def draw_application_buttons(page, page_size, selected, grid_size):
         if index == selected:
             font = Font.BOLD
 
+        color=Color.GREEN
+        if application_list[index+page_offset].installed:
+            color=Color.WHITE
+
         if page_offset+index < len(application_list):
-            display_text(str(application_list[index+page_offset]), screen_width/2, grid_size*2+grid_size*3*index, grid_size, font=font)
+            display_text(str(application_list[index+page_offset]), screen_width/2, grid_size*2+grid_size*3*index, grid_size, text_color=color, font=font)
 
 def draw_loading_screen(screen, screen_width, screen_height, grid_size):
     screen.fill(Color.BLUE)
@@ -105,11 +109,11 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
         elif event.type == pygame.JOYBUTTONDOWN:
-            if event.button == Button.A:
+            if event.button == Button.A and not application_list[page*page_size+selected].installed:
                 display_text("Installing...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
                 application_list[page*page_size+selected].install()
-            if event.button == Button.X:
+            if event.button == Button.X and application_list[page*page_size+selected].installed:
                 display_text("Uninstalling...", screen_width/2, screen_height/2, grid_size, font=Font.REGULAR)
                 pygame.display.update()
                 application_list[page*page_size+selected].uninstall()

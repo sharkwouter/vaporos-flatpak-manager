@@ -1,20 +1,15 @@
 import subprocess
 import pyflatpak
 
-steamos_flatpak_version = "0.8.9"
-#steamos_flatpak_version = "1.2.4" # actually Debian Buster's version
-
 class manager():
 
     def __init__(self, remote_name="flathub", remote_url="https://dl.flathub.org/repo/flathub.flatpakrepo"):
-        # Try to add the remote, just in case we don't have it yet
-        self.__version = self.__get_flatpak__version()
-
-        self.__add_remote(remote_name, remote_url)
-
-        self.__application_list = self.__generate_application_list(remote_name)
-
         self.__remote_name = remote_name
+
+        self.__version = self.__get_flatpak__version()
+        self.__add_remote(remote_name, remote_url)
+        self.__installed_list = self.__generate_installed_list()
+        self.__application_list = self.__generate_application_list(remote_name)
 
     def __add_remote(self, remote_name, remote_url):
         return_value = subprocess.call(["flatpak", "remote-add", "--user", "--if-not-exists", remote_name, remote_url])
@@ -23,27 +18,49 @@ class manager():
         print("{} was successfully added".format(remote_name))
 
     def __generate_application_list(self, remote_name):
-        if self.__version != steamos_flatpak_version:
-            command = ["flatpak", "remote-ls",remote_name,"--user", "--app","--columns=application,description"]
-        else:
-            command = ["flatpak", "remote-ls",remote_name,"--user", "--app"]
+        command = ["flatpak", "remote-ls",remote_name,"--user", "--app"]
         application_list = []
         line_number = 1
         for line in subprocess.check_output(command).splitlines():
-            if line_number == 1:
-                line_number += 1
-                continue
-            if self.__version != steamos_flatpak_version:
-                id, description = line.split("\t")
-                application_list.append(pyflatpak.application(id, remote_name, description))
+            if self.meets_version_requirement("1.1.0"):
+                if line_number == 1:
+                    line_number += 1
+                    continue
+                name_description, id, version, branch = line.split("\t", 3)
+                print(name_description)
+                if "-" in name_description:
+                    name, description = name_description.split("-", 1)
+                else:
+                    name = line.split(".")[-1]
+                    description = ""
+
+                installed = (id in self.__installed_list)
+                application = pyflatpak.application(id, remote_name, name, installed, description, version=version)
             else:
-                line_content = line.split(".")
-                print(line_content)
-                description = line_content[-1]
-                application_list.append(pyflatpak.application(line, remote_name, description))
+                name = line.split(".")[-1]
+                installed = (line in self.__installed_list)
+                application = pyflatpak.application(line, remote_name, name, installed)
+
+            application_list.append(application)
             line_number += 1
 
         return application_list
+
+    def __generate_installed_list(self):
+        command = ["flatpak", "list","--user", "--app"]
+        installed_list = []
+        line_number = 1
+        for line in subprocess.check_output(command).splitlines():
+            if self.meets_version_requirement("1.1.0"):
+                if line_number == 1:
+                    line_number += 1
+                    continue
+                name_description, id, version, branch, arch, origin = line.split("\t", 5)
+                installed_list.append(id)
+            else:
+                installed_list.append(line)
+            line_number += 1
+        return installed_list
 
     def __get_flatpak__version(self):
         command = ["flatpak", "--version"]
@@ -58,6 +75,23 @@ class manager():
 
     def get_application_list(self):
         return self.__application_list
+
+    def meets_version_requirement(self, version):
+        required = version.split(".")
+        current = self.__version.split(".")
+
+        meets_requirements = False
+        if required[0] < current[0]:
+            meets_requirements = True
+        elif required[0] == current[0] and required[1] < current[1]:
+            meets_requirements = True
+        elif required[0] == current[0] and required[1] == current[1] and required[2] < current[2]:
+            meets_requirements = True
+        elif required[0] == current[0] and required[1] == current[1] and required[2] == current[2]:
+            meets_requirements = True
+
+        return meets_requirements
+
 
     def __str__():
         return self.__remote_name
