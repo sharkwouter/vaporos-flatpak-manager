@@ -133,29 +133,47 @@ class gui:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.running = False
-            elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == Button.A and not application.installed:
-                    self.__show_loading_screen("Installing...")
-                    application.install()
-                if event.button == Button.X and application.installed:
-                    self.__show_loading_screen("Uninstalling...")
-                    application.uninstall()
-                elif event.button == Button.LB:
-                    self.change_page(-1)
-                    self.selected = 0
-                elif event.button == Button.RB:
-                    self.change_page(1)
-                    self.selected = 0
-                elif event.button == Button.SEL:
-                    self.running = False
             elif event.type == pygame.JOYHATMOTION:
                 if event.value == (0, 1):
                     self.selected -= 1
                 elif event.value == (0, -1):
                     self.selected += 1
+                elif event.value == (-1, 0):
+                    self.change_page(-1)
+                elif event.value == (1, 0):
+                    self.change_page(1)
+            elif event.type == pygame.JOYBUTTONDOWN:
+                if event.button == Button.A and not application.installed:
+                    self.__show_loading_screen("Installing...")
+                    application.install()
+                elif event.button == Button.X and application.installed:
+                    self.__show_loading_screen("Uninstalling...")
+                    application.uninstall()
+                elif event.button == Button.LB:
+                    self.change_page(-1)
+                elif event.button == Button.RB:
+                    self.change_page(1)
+                elif event.button == Button.SEL:
+                    self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and not application.installed:
+                    self.__show_loading_screen("Installing...")
+                    application.install()
+                elif event.key == pygame.K_BACKSPACE and application.installed:
+                    self.__show_loading_screen("Uninstalling...")
+                    application.uninstall()
+                elif event.key == pygame.K_UP:
+                    self.selected -= 1
+                elif event.key == pygame.K_DOWN:
+                    self.selected += 1
+                elif event.key == pygame.K_LEFT:
+                    self.change_page(-1)
+                elif event.key == pygame.K_RIGHT:
+                    self.change_page(1)
+                elif event.key == pygame.K_ESCAPE:
+                    self.running = False
+
+
 
         if self.selected < 0:
             self.selected = 0
