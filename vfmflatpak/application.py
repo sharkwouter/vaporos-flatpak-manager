@@ -39,6 +39,8 @@ class application():
     def __lt__(self, other):
         names = [str(self), str(other)]
         names.sort()
-        if names[0] == str(self):
+        if names[0] == str(self) and self.installed == other.installed:
+            return True
+        if self.installed and not other.installed:
             return True
         return False

@@ -10,7 +10,7 @@ class manager():
         self.__add_remote(remote_name, remote_url)
         self.__installed_list = self.__generate_installed_list()
         self.__application_list = self.__generate_application_list(remote_name)
-        self.__application_list.sort()
+        self.sort_application_list()
 
         print(self.__application_list)
         print(self.__installed_list)
@@ -80,6 +80,9 @@ class manager():
 
     def get_application_list(self):
         return self.__application_list
+
+    def sort_application_list(self):
+        self.__application_list.sort()
 
     def meets_version_requirement(self, version):
         required = version.split(".")

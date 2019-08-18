@@ -124,7 +124,7 @@ class gui:
                 self.__draw__application_button(self.application_list[index+page_offset], index, selected)
 
         # Draw bottom text
-        bottom_text = "A - install  B - uninstall   START - exit"
+        bottom_text = "A - install  X - uninstall   START - exit"
         self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
 
 
@@ -155,9 +155,11 @@ class gui:
                 if event.button == Button.A and not application.installed:
                     self.__show_loading_screen("Installing...")
                     application.install()
+                    self.__flatpak_manager.sort_application_list()
                 elif event.button == Button.X and application.installed:
                     self.__show_loading_screen("Uninstalling...")
                     application.uninstall()
+                    self.__flatpak_manager.sort_application_list()
                 elif event.button == Button.LB:
                     self.change_page(-1)
                 elif event.button == Button.RB:
@@ -168,9 +170,11 @@ class gui:
                 if event.key == pygame.K_RETURN and not application.installed:
                     self.__show_loading_screen("Installing...")
                     application.install()
+                    self.__flatpak_manager.sort_application_list()
                 elif event.key == pygame.K_BACKSPACE and application.installed:
                     self.__show_loading_screen("Uninstalling...")
                     application.uninstall()
+                    self.__flatpak_manager.sort_application_list()
                 elif event.key == pygame.K_UP:
                     self.selected -= 1
                 elif event.key == pygame.K_DOWN:
