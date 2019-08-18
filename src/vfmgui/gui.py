@@ -62,7 +62,7 @@ class gui:
         self.framerate = 30
         self.running = False
 
-        self.page = 1
+        self.page = 128
         self.selected = 0
 
     def run(self):
@@ -115,6 +115,8 @@ class gui:
     def __draw_gui(self):
         page_offset = (self.page-1)*self.__page_size
         for index in range(0, self.__page_size):
+            if index+page_offset >= len(self.application_list):
+                return
             font = Font.REGULAR
             if index == self.selected:
                 font = Font.BOLD
@@ -141,11 +143,11 @@ class gui:
                 if event.button == Button.X and application.installed:
                     self.__show_loading_screen("Uninstalling...")
                     application.uninstall()
-                elif event.button == Button.LB and self.page > 1:
-                    self.page -= 1
+                elif event.button == Button.LB:
+                    self.change_page(-1)
                     self.selected = 0
-                elif event.button == Button.RB and self.page < len(self.application_list)/self.__page_size-2:
-                    self.page += 1
+                elif event.button == Button.RB:
+                    self.change_page(1)
                     self.selected = 0
                 elif event.button == Button.SEL:
                     self.running = False
@@ -156,9 +158,11 @@ class gui:
                     self.selected += 1
 
         if self.selected < 0:
-            self.selected = 4
-        elif self.selected > 4:
             self.selected = 0
+            self.change_page(-1, self.__page_size-1)
+        elif self.selected > self.__page_size-1:
+            self.selected = 4
+            self.change_page(1, 0)
 
     def __update_screen(self):
         pygame.display.update()
@@ -171,5 +175,15 @@ class gui:
         text_rectangle.center = (x, y)
         self.__screen.blit(text_surface, text_rectangle)
 
+    def change_page(self, change, selected=None):
+        if (self.page + change) < 1 or (self.page + change) > len(self.application_list)/self.__page_size:
+            return
+        if selected is not None:
+            self.selected = selected
+        self.page += change
+
     def get_selected_application(self):
-        return self.application_list[self.page*self.__page_size+self.selected]
+        index = (self.page-1)*self.__page_size+self.selected
+        if index >= len(self.application_list):
+            return None
+        return self.application_list[(self.page-1)*self.__page_size+self.selected]
