@@ -154,12 +154,10 @@ class gui:
             elif event.type == pygame.JOYBUTTONDOWN:
                 if event.button == Button.A and not application.installed:
                     self.__show_loading_screen("Installing...")
-                    application.install()
-                    self.__flatpak_manager.sort_application_list()
+                    self.__flatpak_manager.install(application)
                 elif event.button == Button.X and application.installed:
                     self.__show_loading_screen("Uninstalling...")
-                    application.uninstall()
-                    self.__flatpak_manager.sort_application_list()
+                    self.__flatpak_manager.uninstall(application)
                 elif event.button == Button.LB:
                     self.change_page(-1)
                 elif event.button == Button.RB:
@@ -169,12 +167,10 @@ class gui:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and not application.installed:
                     self.__show_loading_screen("Installing...")
-                    application.install()
-                    self.__flatpak_manager.sort_application_list()
+                    self.__flatpak_manager.install(application)
                 elif event.key == pygame.K_BACKSPACE and application.installed:
                     self.__show_loading_screen("Uninstalling...")
-                    application.uninstall()
-                    self.__flatpak_manager.sort_application_list()
+                    self.__flatpak_manager.uninstall(application)
                 elif event.key == pygame.K_UP:
                     self.selected -= 1
                 elif event.key == pygame.K_DOWN:

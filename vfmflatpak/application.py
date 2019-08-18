@@ -16,20 +16,6 @@ class application():
         if not self.description:
             self.description = self.flatpak_id
 
-    def install(self):
-        return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.remote, self.flatpak_id])
-        if return_value != 0:
-            raise Exception("Error: Failed to install application {}".format(self.flatpak_id))
-        print("{} was successfully installed".format(self.flatpak_id))
-        self.installed = True
-
-    def uninstall(self):
-        return_value = subprocess.call(["flatpak", "uninstall", "--user", self.flatpak_id])
-        if return_value != 0:
-            raise Exception("Error: Failed to uninstall application {}".format(self.flatpak_id))
-        print("{} was successfully uninstalled".format(self.flatpak_id))
-        self.installed = False
-
     def __str__(self):
         return self.name.title()
 

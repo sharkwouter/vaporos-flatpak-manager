@@ -10,7 +10,7 @@ class manager():
         self.__add_remote(remote_name, remote_url)
         self.__installed_list = self.__generate_installed_list()
         self.__application_list = self.__generate_application_list(remote_name)
-        self.sort_application_list()
+        self.__sort_application_list()
 
         print(self.__application_list)
         print(self.__installed_list)
@@ -81,7 +81,7 @@ class manager():
     def get_application_list(self):
         return self.__application_list
 
-    def sort_application_list(self):
+    def __sort_application_list(self):
         self.__application_list.sort()
 
     def meets_version_requirement(self, version):
@@ -99,6 +99,28 @@ class manager():
             meets_requirements = True
 
         return meets_requirements
+
+    def install(self, application):
+        return_value = subprocess.call(["flatpak", "install", "--user", "-y", self.__remote_name, application.flatpak_id])
+        if return_value != 0:
+            raise Exception("Error: Failed to install application {}".format(application.flatpak_id))
+        print("{} was successfully installed".format(application.flatpak_id))
+        application.installed = True
+        self.__sort_application_list()
+
+    def uninstall(self, application):
+        # 1.0.0 and newer requires the -y option
+        if self.meets_version_requirement("1.0.0"):
+            command = ["flatpak", "uninstall", "--user", "-y", application.flatpak_id]
+        else:
+            command = ["flatpak", "uninstall", "--user", application.flatpak_id]
+
+        return_value = subprocess.call(command)
+        if return_value != 0:
+            raise Exception("Error: Failed to uninstall application {}".format(application.flatpak_id))
+        print("{} was successfully uninstalled".format(application.flatpak_id))
+        application.installed = False
+        self.__sort_application_list()
 
 
     def __str__():
