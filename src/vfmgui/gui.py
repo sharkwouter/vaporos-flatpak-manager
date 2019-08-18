@@ -108,6 +108,10 @@ class gui:
         # Draw title
         self.__display_text_centered(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
 
+        # Draw bottom text
+        bottom_text = "A - install  B - uninstall   START - exit"
+        self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+
         page_offset = (self.page-1)*self.__page_size
         for index in range(0, self.__page_size):
             if index+page_offset >= len(self.application_list):
