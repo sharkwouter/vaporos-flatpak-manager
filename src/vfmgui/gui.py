@@ -62,7 +62,7 @@ class gui:
         self.framerate = 30
         self.running = False
 
-        self.page = 128
+        self.page = 1
         self.selected = 0
 
     def run(self):
