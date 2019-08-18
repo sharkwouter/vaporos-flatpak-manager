@@ -2,6 +2,11 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: vaporos-flatpak-manager
 Source: http://vaporos.net/
 
+Files: data/vaporos-flatpak-manager.png
+Copyright: 2015 PanierAvide
+License: Creative Commons Attribution-Share Alike 4.0 International
+ https://creativecommons.org/licenses/by-sa/4.0/deed.en
+
 Files: *
 Copyright: 2019 Wouter Wijsman <wwijsman@live.nl>
 License: MIT
