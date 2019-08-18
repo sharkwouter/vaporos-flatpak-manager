@@ -1,5 +1,6 @@
 import pygame
 import vfmflatpak
+import os
 
 
 class Color():
@@ -34,8 +35,12 @@ class Axis():
 
 
 class Font():
-    REGULAR = "../fonts/DejaVuSansMono.ttf"
-    BOLD = "../fonts/DejaVuSansMono-Bold.ttf"
+    REGULAR = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+    BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
+    if not os.path.isfile(REGULAR):
+        font_regular = "fonts/DejaVuSansMono.ttf"
+    if not os.path.isfile(BOLD):
+        font_bold = "fonts/DejaVuSansMono-Bold.ttf"
 
 
 class gui:
@@ -108,19 +113,19 @@ class gui:
         # Draw title
         self.__display_text_centered(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
 
-        # Draw bottom text
-        bottom_text = "A - install  B - uninstall   START - exit"
-        self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
-
+        # Draw the buttons for the applications
         page_offset = (self.page-1)*self.__page_size
         for index in range(0, self.__page_size):
             if index+page_offset >= len(self.application_list):
                 return
 
             selected = (index == self.selected)
-
             if page_offset+index < len(self.application_list):
                 self.__draw__application_button(self.application_list[index+page_offset], index, selected)
+
+        # Draw bottom text
+        bottom_text = "A - install  B - uninstall   START - exit"
+        self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
 
 
     def __read_input(self):
