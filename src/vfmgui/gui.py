@@ -8,6 +8,13 @@ class Color():
     GREEN = 0,255,0
     BLACK = 0, 0, 0
     WHITE = 255, 255 ,255
+    BACKGROUND = 19, 139, 67
+    BUTTON = 20, 167, 92
+    BUTTON_SELECTED = 108, 196, 154
+    BUTTON_BORDER = 0, 0, 0
+    BUTTON_BORDER_SELECTED = 185, 185 ,185
+    TEXT_TITLE = 255, 255, 255
+    TEXT = 0, 0, 0
 
 
 class Button():
@@ -49,14 +56,6 @@ class gui:
         self.__grid_size = screen_width/32
         self.application_list = []
 
-        self.background_color = Color.BLUE
-        self.title_color = Color.BLACK
-        self.text_color = Color.GREEN
-        self.selection_color = Color.WHITE
-
-        self.default_font = Font.REGULAR
-        self.title_font = Font.BOLD
-
         self.framerate = 30
         self.running = False
 
@@ -92,12 +91,12 @@ class gui:
 
     def __show_splash_screen(self):
         self.__draw_background()
-        self.__display_text(self.application_name, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, self.title_color, self.title_font)
+        self.__display_text(self.application_name, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __show_loading_screen(self, text):
         self.__draw_background()
-        self.__display_text(text, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, self.title_color, self.title_font)
+        self.__display_text(text, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __run(self):
@@ -108,23 +107,22 @@ class gui:
             self.__update_screen()
 
     def __draw_background(self):
-        self.__screen.fill(Color.BLUE)
+        self.__screen.fill(Color.BACKGROUND)
 
     def __draw_gui(self):
+        # Draw title
+        self.__display_text(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
+
         page_offset = (self.page-1)*self.__page_size
         for index in range(0, self.__page_size):
             if index+page_offset >= len(self.application_list):
                 return
-            font = Font.REGULAR
-            if index == self.selected:
-                font = Font.BOLD
 
-            color=Color.GREEN
-            if self.application_list[index+page_offset].installed:
-                color=Color.WHITE
+            selected = (index == self.selected)
 
             if page_offset+index < len(self.application_list):
-                self.__display_text(str(self.application_list[index+page_offset]), self.__screen_width/2, self.__grid_size*2+self.__grid_size*3*index, self.__grid_size, color, font)
+                self.__draw__application_button(self.application_list[index+page_offset], index, selected)
+
 
     def __read_input(self):
         application = self.get_selected_application()
@@ -182,12 +180,37 @@ class gui:
         pygame.display.update()
         self.__clock.tick(self.framerate)
 
-    def __display_text(self, text, x, y, size, text_color, font):
+    def __display_text(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
         font = pygame.font.Font(font, size)
         text_surface = font.render(text, True, text_color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = (x, y)
         self.__screen.blit(text_surface, text_rectangle)
+
+    def __draw__application_button(self, application, index, selected):
+        if selected:
+            button_color = Color.BUTTON_SELECTED
+            button_border_color = Color.BUTTON_BORDER_SELECTED
+            font = Font.BOLD
+        else:
+            button_color = Color.BUTTON
+            button_border_color = Color.BUTTON_BORDER
+            font = Font.REGULAR
+
+        # draw the rectangle
+        rect_x = self.__grid_size*3
+        rect_y = self.__grid_size*1.5+self.__grid_size*3*index+1
+        rect_width = self.__screen_width-self.__grid_size*6
+        rect_height = self.__grid_size*3-2
+        pygame.draw.rect(self.__screen, button_color, pygame.Rect(rect_x, rect_y, rect_width, rect_height))
+
+        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x+rect_width, rect_y), 1)
+        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y+rect_height), (rect_x+rect_width, rect_y+rect_height), 1)
+        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x, rect_y+rect_height), 1)
+        pygame.draw.line(self.__screen, button_border_color, (rect_x+rect_width, rect_y), (rect_x+rect_width, rect_y+rect_height), 1)
+
+        self.__display_text(str(application), self.__screen_width/2, self.__grid_size*2+self.__grid_size*3*index, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+
 
     def change_page(self, change, selected=None):
         if (self.page + change) < 1 or (self.page + change) > len(self.application_list)/self.__page_size:
