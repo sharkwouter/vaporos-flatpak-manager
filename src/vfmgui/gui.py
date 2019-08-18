@@ -10,10 +10,6 @@ class Color():
     WHITE = 255, 255 ,255
 
 
-class GameState():
-    MENU = 1
-
-
 class Button():
     A = 0
     B = 1
@@ -34,9 +30,11 @@ class Axis():
     RHOR = 4
     RVERT = 3
 
+
 class Font():
     REGULAR = "../fonts/DejaVuSansMono.ttf"
     BOLD = "../fonts/DejaVuSansMono-Bold.ttf"
+
 
 class gui:
 
@@ -172,8 +170,6 @@ class gui:
                     self.change_page(1)
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
-
-
 
         if self.selected < 0:
             self.selected = 0
