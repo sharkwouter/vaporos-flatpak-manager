@@ -86,12 +86,12 @@ class gui:
 
     def __show_splash_screen(self):
         self.__draw_background()
-        self.__display_text(self.application_name, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
+        self.__display_text_centered(self.application_name, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __show_loading_screen(self, text):
         self.__draw_background()
-        self.__display_text(text, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
+        self.__display_text_centered(text, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __run(self):
@@ -106,7 +106,7 @@ class gui:
 
     def __draw_gui(self):
         # Draw title
-        self.__display_text(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
+        self.__display_text_centered(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
 
         page_offset = (self.page-1)*self.__page_size
         for index in range(0, self.__page_size):
@@ -133,6 +133,15 @@ class gui:
                     self.change_page(-1)
                 elif event.value == (1, 0):
                     self.change_page(1)
+            elif event.type == pygame.JOYAXISMOTION:
+                if event.axis == 1 and event.value < -0.5:
+                    self.selected -= 1
+                elif event.axis == 1 and event.value > 0.5:
+                    self.selected += 1
+                elif event.axis == 0 and event.value < -0.5:
+                    self.change_page(-1)
+                elif event.axis == 0 and event.value > 0.5:
+                    self.change_page(1)
             elif event.type == pygame.JOYBUTTONDOWN:
                 if event.button == Button.A and not application.installed:
                     self.__show_loading_screen("Installing...")
@@ -144,7 +153,7 @@ class gui:
                     self.change_page(-1)
                 elif event.button == Button.RB:
                     self.change_page(1)
-                elif event.button == Button.SEL:
+                elif event.button == Button.SEL or event.button == Button.START:
                     self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and not application.installed:
@@ -175,12 +184,18 @@ class gui:
         pygame.display.update()
         self.__clock.tick(self.framerate)
 
-    def __display_text(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
+    def __display_text_centered(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
         font = pygame.font.Font(font, size)
         text_surface = font.render(text, True, text_color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = (x, y)
         self.__screen.blit(text_surface, text_rectangle)
+
+    def __display_text(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
+        font = pygame.font.Font(font, size)
+        text_surface = font.render(text, True, text_color)
+        rect = pygame.Rect(x, y, self.__screen_width-self.__grid_size*3-x, size)
+        self.__screen.blit(text_surface, rect)
 
     def __draw__application_button(self, application, index, selected):
         if selected:
@@ -204,7 +219,8 @@ class gui:
         pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x, rect_y+rect_height), 1)
         pygame.draw.line(self.__screen, button_border_color, (rect_x+rect_width, rect_y), (rect_x+rect_width, rect_y+rect_height), 1)
 
-        self.__display_text(str(application), self.__screen_width/2, self.__grid_size*2+self.__grid_size*3*index, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        title = str(application)
+        self.__display_text(title, rect_x, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
 
 
     def change_page(self, change, selected=None):
