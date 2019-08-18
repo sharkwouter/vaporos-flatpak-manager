@@ -219,8 +219,14 @@ class gui:
         pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x, rect_y+rect_height), 1)
         pygame.draw.line(self.__screen, button_border_color, (rect_x+rect_width, rect_y), (rect_x+rect_width, rect_y+rect_height), 1)
 
-        title = str(application)
-        self.__display_text(title, rect_x+self.__grid_size*0.5, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        self.__display_text(str(application), rect_x+self.__grid_size*0.5, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        description_short = application.description
+        if len(description_short) >= 80:
+            description_short = "{}...".format(description_short[:79])
+        self.__display_text(description_short, rect_x+self.__grid_size*0.5, rect_y+self.__grid_size*2, self.__grid_size/2, Color.TEXT_TITLE, Font.REGULAR)
+        if application.installed:
+            self.__display_text("Installed", rect_x+rect_width-self.__grid_size*5, rect_y+self.__grid_size*0.5, self.__grid_size/2, Color.TEXT_TITLE, Font.REGULAR)
+
 
 
     def change_page(self, change, selected=None):
