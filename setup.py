@@ -11,6 +11,10 @@ setup(
         ('share/pixmaps', ['data/vaporos-flatpak-manager.png']),
     ],
 
+    install_requires=[
+          'pygame',
+      ],
+
     #metadata
     author="Wouter wijsman",
     author_email="wwijsman@live.nl",
