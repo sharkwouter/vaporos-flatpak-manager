@@ -29,4 +29,7 @@ class application():
         self.installed = False
 
     def __str__(self):
-        return "{} - {}".format(self.name, self.description)
+        return self.name
+
+    def __repr__(self):
+        return self.name

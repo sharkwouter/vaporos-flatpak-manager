@@ -1,5 +1,5 @@
 import subprocess
-import pyflatpak
+import vfmflatpak
 
 class manager():
 
@@ -35,11 +35,11 @@ class manager():
                     description = ""
 
                 installed = (id in self.__installed_list)
-                application = pyflatpak.application(id, remote_name, name, installed, description, version=version)
+                application = vfmflatpak.application(id, remote_name, name, installed, description, version=version)
             else:
                 name = line.split(".")[-1]
                 installed = (line in self.__installed_list)
-                application = pyflatpak.application(line, remote_name, name, installed)
+                application = vfmflatpak.application(line, remote_name, name, installed)
 
             application_list.append(application)
             line_number += 1
