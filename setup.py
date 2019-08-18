@@ -5,7 +5,11 @@ setup(
     packages=find_packages(),
     scripts=["vaporos-flatpak-manager"],
 
-    data_files = [('', ['LICENSE'])],
+    data_files = [
+        ('', ['LICENSE']),
+        ('share/applications', ['data/vaporos-flatpak-manager.desktop']),
+        ('share/pixmaps', ['data/vaporos-flatpak-manager.png']),
+    ],
 
     #metadata
     author="Wouter wijsman",
@@ -13,6 +17,7 @@ setup(
     description="A flatpak frontend for SteamOS",
     keywords="flatpak steamos vaporos installer",
     url="http://vaporos.net/",
+    license='MIT',
     project_urls={
         "Bug Tracker": "https://github.com/sharkwouter/vaporos-flatpak-manager/issues",
         "Documentation": "https://github.com/sharkwouter/vaporos-flatpak-manager/blob/master/README.md",

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Vaporos Flatpak Manager
+GenericName=Flatpak Manager
+Comment=Flatpak frontend for SteamOS
+Exec=vaporos-flatpak-manager
+Icon=vaporos-flatpak-manager
+Type=Application
+Categories=Utility;
