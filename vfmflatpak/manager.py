@@ -10,6 +10,7 @@ class manager():
         self.__add_remote(remote_name, remote_url)
         self.__installed_list = self.__generate_installed_list()
         self.__application_list = self.__generate_application_list(remote_name)
+        self.__application_list.sort()
 
     def __add_remote(self, remote_name, remote_url):
         return_value = subprocess.call(["flatpak", "remote-add", "--user", "--if-not-exists", remote_name, remote_url])

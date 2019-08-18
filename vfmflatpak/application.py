@@ -35,3 +35,10 @@ class application():
 
     def __repr__(self):
         return self.name
+
+    def __lt__(self, other):
+        names = [str(self), str(other)]
+        names.sort()
+        if names[0] == str(self):
+            return True
+        return False
