@@ -11,7 +11,7 @@ X-Python3-Version: >= 3.2
 
 Package: python-vaporos-flatpak-manager
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame
+Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame, fonts-dejavu-core
 Suggests: python-vaporos-flatpak-manager-doc
 Description: <insert up to 60 chars description> (Python 2)
  <insert long description, indented with spaces>
