@@ -1,16 +1,11 @@
-import subprocess
+class Application:
 
-class Version():
-    UNKNOWN = "unknown"
-
-class application():
-
-    def __init__(self, flatpak_id, remote, name, installed, description="", version=Version.UNKNOWN):
+    def __init__(self, flatpak_id, name, description, latest_version, image_url, installed=False):
         self.flatpak_id = flatpak_id
-        self.remote = remote
         self.name = name
         self.description = description
-        self.version = version
+        self.latest_version = latest_version
+        self.image_url = image_url
         self.installed = installed
 
         if not self.description:

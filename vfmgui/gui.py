@@ -1,5 +1,5 @@
 import pygame
-import pyflatpak
+import vfmflathub
 import os
 
 
@@ -68,9 +68,9 @@ class gui:
         self.__setup_joysticks()
         self.__show_splash_screen()
 
-        # This can take a while
-        self.__flatpak_manager = pyflatpak.manager()
-        self.application_list = self.__flatpak_manager.get_application_list()
+        # Add Flathub to Flatpak and get the application list. This can take a while
+        vfmflathub.add_flathub()
+        self.application_list = vfmflathub.get_applications()
 
         self.__run()
 
@@ -154,10 +154,10 @@ class gui:
             elif event.type == pygame.JOYBUTTONDOWN:
                 if event.button == Button.A and not application.installed:
                     self.__show_loading_screen("Installing...")
-                    self.__flatpak_manager.install(application)
+                    vfmflathub.install(application)
                 elif event.button == Button.X and application.installed:
                     self.__show_loading_screen("Uninstalling...")
-                    self.__flatpak_manager.uninstall(application)
+                    vfmflathub.uninstall(application)
                 elif event.button == Button.LB:
                     self.change_page(-1)
                 elif event.button == Button.RB:
@@ -167,10 +167,10 @@ class gui:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and not application.installed:
                     self.__show_loading_screen("Installing...")
-                    self.__flatpak_manager.install(application)
+                    vfmflathub.install(application)
                 elif event.key == pygame.K_BACKSPACE and application.installed:
                     self.__show_loading_screen("Uninstalling...")
-                    self.__flatpak_manager.uninstall(application)
+                    vfmflathub.uninstall(application)
                 elif event.key == pygame.K_UP:
                     self.selected -= 1
                 elif event.key == pygame.K_DOWN:
