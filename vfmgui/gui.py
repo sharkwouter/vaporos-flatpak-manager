@@ -1,5 +1,5 @@
 import pygame
-import vfmflatpak
+import pyflatpak
 import os
 
 
@@ -69,7 +69,7 @@ class gui:
         self.__show_splash_screen()
 
         # This can take a while
-        self.__flatpak_manager = vfmflatpak.manager()
+        self.__flatpak_manager = pyflatpak.manager()
         self.application_list = self.__flatpak_manager.get_application_list()
 
         self.__run()
