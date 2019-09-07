@@ -11,7 +11,7 @@ X-Python3-Version: >= 3.2
 
 Package: vaporos-flatpak-manager
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame, python-requests, fonts-dejavu-core
+Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame, python-requests, fonts-liberation
 Conflicts: python-vaporos-flatpak-manager
 Description: A Flatpak front-end with gamepad support
  VaporOS Flatpak Manager gives SteamOS users the ability to easily install

@@ -1,7 +1,7 @@
 import pygame
 import vfmflathub
 import os
-
+import vfmgui
 
 class Image:
     LOGO = "/usr/share/pixmaps/vaporos-flatpak-manager.png"
@@ -9,18 +9,7 @@ class Image:
         LOGO = "data/vaporos-flatpak-manager.png"
 
 
-
-class Color():
-    BACKGROUND = 19, 139, 67
-    BUTTON = 20, 167, 92
-    BUTTON_SELECTED = 108, 196, 154
-    BUTTON_BORDER = 0, 0, 0
-    BUTTON_BORDER_SELECTED = 185, 185 ,185
-    TEXT_TITLE = 255, 255, 255
-    TEXT = 0, 0, 0
-
-
-class Button():
+class GamepadButton:
     A = 0
     B = 1
     X = 2
@@ -34,20 +23,11 @@ class Button():
     RTHUMB = 10
 
 
-class Axis():
+class Axis:
     LHOR = 0
     LVERT = 1
     RHOR = 4
     RVERT = 3
-
-
-class Font():
-    REGULAR = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-    BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
-    if not os.path.isfile(REGULAR):
-        font_regular = "fonts/DejaVuSansMono.ttf"
-    if not os.path.isfile(BOLD):
-        font_bold = "fonts/DejaVuSansMono-Bold.ttf"
 
 
 class gui:
@@ -106,13 +86,13 @@ class gui:
 
         # draw title
         self.__display_text_centered(self.application_name, self.__screen_width / 2, self.__screen_height - self.__grid_size,
-                                     self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
+                                     self.__grid_size, vfmgui.Colors.TEXT, vfmgui.Fonts.REGULAR)
         self.__update_screen()
 
     def __show_loading_screen(self, text):
         self.__draw_background()
         self.__display_text_centered(text, self.__screen_width / 2, self.__screen_height/2,
-                                     self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
+                                     self.__grid_size*2, vfmgui.Colors.TEXT, vfmgui.Fonts.REGULAR)
         self.__update_screen()
 
     def __run(self):
@@ -123,11 +103,11 @@ class gui:
             self.__update_screen()
 
     def __draw_background(self):
-        self.__screen.fill(Color.BACKGROUND)
+        self.__screen.fill(vfmgui.Colors.BACKGROUND)
 
     def __draw_gui(self):
         # Draw title
-        self.__display_text_centered(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
+        self.__display_text_centered(self.application_name, self.__screen_width/2, self.__grid_size*0.75, self.__grid_size, vfmgui.Colors.TEXT_TITLE, vfmgui.Fonts.REGULAR)
 
         # Draw the buttons for the applications
         page_offset = (self.page-1)*self.__page_size
@@ -141,7 +121,7 @@ class gui:
 
         # Draw bottom text
         bottom_text = "A - install  X - uninstall   START - exit"
-        self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        self.__display_text_centered(bottom_text, self.__screen_width/2, self.__screen_height-self.__grid_size*0.75, self.__grid_size, vfmgui.Colors.TEXT_TITLE, vfmgui.Fonts.REGULAR)
 
 
     def __read_input(self):
@@ -168,17 +148,17 @@ class gui:
                 elif event.axis == 0 and event.value > 0.5:
                     self.change_page(1)
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == Button.A and not application.installed:
+                if event.button == GamepadButton.A and not application.installed:
                     self.__show_loading_screen("Installing...")
                     vfmflathub.install(application)
-                elif event.button == Button.X and application.installed:
+                elif event.button == GamepadButton.X and application.installed:
                     self.__show_loading_screen("Uninstalling...")
                     vfmflathub.uninstall(application)
-                elif event.button == Button.LB:
+                elif event.button == GamepadButton.LB:
                     self.change_page(-1)
-                elif event.button == Button.RB:
+                elif event.button == GamepadButton.RB:
                     self.change_page(1)
-                elif event.button == Button.SEL or event.button == Button.START:
+                elif event.button == GamepadButton.SEL or event.button == GamepadButton.START:
                     self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN and not application.installed:
@@ -209,14 +189,14 @@ class gui:
         pygame.display.update()
         self.__clock.tick(self.framerate)
 
-    def __display_text_centered(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
+    def __display_text_centered(self, text, x, y, size, text_color, font):
         font = pygame.font.Font(font, size)
         text_surface = font.render(text, True, text_color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = (x, y)
         self.__screen.blit(text_surface, text_rectangle)
 
-    def __display_text(self, text, x, y, size, text_color=Color.TEXT, font=Font.REGULAR):
+    def __display_text(self, text, x, y, size, text_color, font):
         font = pygame.font.Font(font, size)
         text_surface = font.render(text, True, text_color)
         rect = pygame.Rect(x, y, self.__screen_width-self.__grid_size*3-x, size)
@@ -224,13 +204,11 @@ class gui:
 
     def __draw__application_button(self, application, index, selected):
         if selected:
-            button_color = Color.BUTTON_SELECTED
-            button_border_color = Color.BUTTON_BORDER_SELECTED
-            font = Font.BOLD
+            button_color = vfmgui.Colors.BUTTON_SELECTED
+            font_color = vfmgui.Colors.BUTTON_TEXT_SELECTED
         else:
-            button_color = Color.BUTTON
-            button_border_color = Color.BUTTON_BORDER
-            font = Font.REGULAR
+            button_color = vfmgui.Colors.BUTTON
+            font_color = vfmgui.Colors.BUTTON_TEXT
 
         # draw the rectangle
         rect_x = self.__grid_size*3
@@ -239,18 +217,13 @@ class gui:
         rect_height = self.__grid_size*3-2
         pygame.draw.rect(self.__screen, button_color, pygame.Rect(rect_x, rect_y, rect_width, rect_height))
 
-        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x+rect_width, rect_y), 1)
-        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y+rect_height), (rect_x+rect_width, rect_y+rect_height), 1)
-        pygame.draw.line(self.__screen, button_border_color, (rect_x, rect_y), (rect_x, rect_y+rect_height), 1)
-        pygame.draw.line(self.__screen, button_border_color, (rect_x+rect_width, rect_y), (rect_x+rect_width, rect_y+rect_height), 1)
-
-        self.__display_text(str(application), rect_x+self.__grid_size*0.5, rect_y, self.__grid_size, Color.TEXT_TITLE, Font.REGULAR)
+        self.__display_text(str(application), rect_x+self.__grid_size*0.5, rect_y, self.__grid_size, font_color, vfmgui.Fonts.REGULAR)
         description_short = application.description
         if len(description_short) >= 80:
             description_short = "{}...".format(description_short[:79])
-        self.__display_text(description_short, rect_x+self.__grid_size*0.5, rect_y+self.__grid_size*2, self.__grid_size/2, Color.TEXT_TITLE, Font.REGULAR)
+        self.__display_text(description_short, rect_x+self.__grid_size*0.5, rect_y+self.__grid_size*2, self.__grid_size/2, font_color, vfmgui.Fonts.REGULAR)
         if application.installed:
-            self.__display_text("Installed", rect_x+rect_width-self.__grid_size*5, rect_y+self.__grid_size*0.5, self.__grid_size/2, Color.TEXT_TITLE, Font.REGULAR)
+            self.__display_text("Installed", rect_x+rect_width-self.__grid_size*5, rect_y+self.__grid_size*0.5, self.__grid_size/2, font_color, vfmgui.Fonts.REGULAR)
 
 
 
