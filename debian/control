@@ -9,11 +9,10 @@ X-Python-Version: >= 2.6
 X-Python3-Version: >= 3.2
 #Testsuite: autopkgtest-pkg-python
 
-Package: python-vaporos-flatpak-manager
+Package: vaporos-flatpak-manager
 Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame, fonts-dejavu-core
-Suggests: python-vaporos-flatpak-manager-doc
-Description: <insert up to 60 chars description> (Python 2)
- <insert long description, indented with spaces>
- .
- This package installs the library for Python 2.
+Depends: ${python:Depends}, ${misc:Depends}, flatpak, python-pygame, python-requests, fonts-dejavu-core
+Conflicts: python-vaporos-flatpak-manager
+Description: A Flatpak front-end with gamepad support
+ VaporOS Flatpak Manager gives SteamOS users the ability to easily install
+ software from the Flathub repo. It uses pygame for the interface.

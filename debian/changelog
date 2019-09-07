@@ -1,3 +1,15 @@
+vaporos-flatpak-manager (1.2) brewmaster; urgency=medium
+
+  * Fixed suggested packages
+
+ -- Wouter Wijsman <wwijsman@live.nl>  Fri, 06 Sep 2019 20:51:11 +0200
+
+vaporos-flatpak-manager (1.1) brewmaster; urgency=medium
+
+  * Added support for the flathub api
+
+ -- Wouter Wijsman <wwijsman@live.nl>  Wed, 04 Sep 2019 22:18:18 +0200
+
 vaporos-flatpak-manager (1.0) brewmaster; urgency=medium
 
   * Initial Release.
