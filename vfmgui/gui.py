@@ -3,6 +3,13 @@ import vfmflathub
 import os
 
 
+class Image:
+    LOGO = "/usr/share/pixmaps/vaporos-flatpak-manager.png"
+    if not os.path.isfile(LOGO):
+        LOGO = "data/vaporos-flatpak-manager.png"
+
+
+
 class Color():
     BACKGROUND = 19, 139, 67
     BUTTON = 20, 167, 92
@@ -91,12 +98,21 @@ class gui:
 
     def __show_splash_screen(self):
         self.__draw_background()
-        self.__display_text_centered(self.application_name, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
+        # draw logo
+        logo = pygame.image.load(Image.LOGO)
+        logo_x = self.__screen_width / 2 - logo.get_width() / 2
+        logo_rect = pygame.Rect(logo_x, 0, logo.get_width(), logo.get_height())
+        self.__screen.blit(logo, logo_rect)
+
+        # draw title
+        self.__display_text_centered(self.application_name, self.__screen_width / 2, self.__screen_height - self.__grid_size,
+                                     self.__grid_size, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __show_loading_screen(self, text):
         self.__draw_background()
-        self.__display_text_centered(text, self.__screen_width/2, self.__screen_height/2, self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
+        self.__display_text_centered(text, self.__screen_width / 2, self.__screen_height/2,
+                                     self.__grid_size*2, Color.TEXT_TITLE, Font.BOLD)
         self.__update_screen()
 
     def __run(self):
