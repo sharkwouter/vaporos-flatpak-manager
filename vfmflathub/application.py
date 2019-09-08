@@ -1,3 +1,8 @@
+import requests
+from appdirs import user_cache_dir
+import os
+
+
 class Application:
 
     def __init__(self, flatpak_id, name, description, latest_version, image_url, installed=False):
@@ -5,11 +10,24 @@ class Application:
         self.name = name
         self.description = description
         self.latest_version = latest_version
-        self.image_url = image_url
         self.installed = installed
 
-        if not self.description:
-            self.description = self.flatpak_id
+        if image_url.startswith("/"):
+            self.image_url = "https://flathub.org{}".format(image_url)
+        else:
+            self.image_url = image_url
+
+    def get_image(self):
+        directory = user_cache_dir("vfm", "vaporos")
+        filename = "{}/{}.png".format(directory, self.flatpak_id)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        if not os.path.isfile(filename):
+            download = requests.get(self.image_url)
+            with open(filename, "wb") as writer:
+                writer.write(download.content)
+                writer.close()
+        return filename
 
     def __str__(self):
         return self.name.title()
