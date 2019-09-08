@@ -1,2 +1,4 @@
+import pygame
+
 class Fonts:
-    REGULAR = "/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf"
+    REGULAR = pygame.font.match_font('liberationsansnarrow')
