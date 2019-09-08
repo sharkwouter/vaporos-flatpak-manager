@@ -82,7 +82,7 @@ class ApplicationButton:
                                           y + height - title.get_height(), title.get_width(),
                                           title.get_height())
         else:
-            rect_title = pygame.Rect(x + width / 2 - title.get_width() / 2, y + 160, title.get_width(),
+            rect_title = pygame.Rect(x + width / 2 - title.get_width() / 2, y + height - title.get_height() - 16, title.get_width(),
                                           title.get_height())
 
         # Draw everything

@@ -66,9 +66,9 @@ class gui:
     def __setup_pygame(self):
         pygame.init()
         if self.__fullscreen:
-            self.__screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+            self.__screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         else:
-            self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height))
+            self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height), pygame.RESIZABLE)
         pygame.display.set_caption(self.application_name)
         self.__clock = pygame.time.Clock()
 
@@ -193,6 +193,9 @@ class gui:
                     self.change_selected(1, 0)
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
+            elif event.type == pygame.VIDEORESIZE:
+                self.__screen = pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
+                self.__screen_width, self.__screen_height = event.dict['size']
 
     def __update_screen(self):
         pygame.display.update()
