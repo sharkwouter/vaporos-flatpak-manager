@@ -127,8 +127,8 @@ class gui:
         # Draw borders
         border_top = pygame.Rect(0, 0, self.__screen_width, 64)
         border_bottom = pygame.Rect(0, self.__screen_height - 64, self.__screen_width, self.__screen_height)
-        pygame.draw.rect(self.__screen, vfmgui.Colors.BACKGROUND, border_top)
-        pygame.draw.rect(self.__screen, vfmgui.Colors.BACKGROUND, border_bottom)
+        pygame.draw.rect(self.__screen, vfmgui.Colors.BORDER, border_top)
+        pygame.draw.rect(self.__screen, vfmgui.Colors.BORDER, border_bottom)
 
         # Draw title
         title = self.__title_font.render(self.application_name, True, vfmgui.Colors.TEXT_TITLE)
