@@ -40,7 +40,7 @@ class gui:
         self.__fullscreen = fullscreen
 
         self.__grid_size = screen_width/32
-        self.application_list = []
+        self.application_buttons = []
 
         self.framerate = 30
         self.running = False
@@ -57,7 +57,9 @@ class gui:
 
         # Add Flathub to Flatpak and get the application list. This can take a while
         vfmflathub.add_flathub()
-        self.application_list = vfmflathub.get_applications()
+        for application in vfmflathub.get_applications():
+            button = vfmgui.ApplicationButton(application)
+            self.application_buttons.append(button)
 
         self.__run()
 
@@ -111,17 +113,16 @@ class gui:
     def __draw_gui(self):
         # Draw the buttons for the applications
         for index in range(self.__screen_first_button-3, self.__screen_first_button+self.__screen_button_limit+3):
-            if index < 0 or index > len(self.application_list)-1:
+            if index < 0 or index > len(self.application_buttons)-1:
                 continue
             button_number = index-self.__screen_first_button
             selected = (index == self.selected)
-            application = self.application_list[index]
+            button = self.application_buttons[index]
             button_width = self.__screen_width/3
             button_height = (self.__screen_height-160)/3
             button_x = button_width*(button_number % 3)
             button_y = 80+button_height*round(button_number/3)
-            button = vfmgui.ApplicationButton(application, button_x, button_y, button_width, button_height, self.__screen)
-            button.draw(selected)
+            button.draw(button_x, button_y, button_width, button_height, selected, self.__screen)
 
         # Draw borders
         border_top = pygame.Rect(0, 0, self.__screen_width, 64)
@@ -130,12 +131,12 @@ class gui:
         pygame.draw.rect(self.__screen, vfmgui.Colors.BACKGROUND, border_bottom)
 
         # Draw title
-        title = self.__title_font.render(self.application_name, False, vfmgui.Colors.TEXT_TITLE)
+        title = self.__title_font.render(self.application_name, True, vfmgui.Colors.TEXT_TITLE)
         title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, -10, title.get_width(), title.get_height())
         self.__screen.blit(title, title_rect)
 
         # Draw bottom text
-        bottom_text = self.__title_font.render("A - install  X - uninstall   START - exit", False, vfmgui.Colors.TEXT_TITLE)
+        bottom_text = self.__title_font.render("A - install  X - uninstall   START - exit", True, vfmgui.Colors.TEXT_TITLE)
         bottom_text_rect = pygame.Rect(self.__screen_width / 2 - bottom_text.get_width() / 2, self.__screen_height-bottom_text.get_height(), bottom_text.get_width(), bottom_text.get_height())
         self.__screen.blit(bottom_text, bottom_text_rect)
 
@@ -218,8 +219,8 @@ class gui:
             self.selected += y * 3
 
         # Make sure the selection is within bounds
-        if self.selected > len(self.application_list)-1:
-            self.selected = len(self.application_list)-1
+        if self.selected > len(self.application_buttons)-1:
+            self.selected = len(self.application_buttons)-1
 
         if self.selected < 0:
             self.selected = 0
@@ -232,6 +233,6 @@ class gui:
                 self.__screen_first_button += 3
 
     def get_selected_application(self):
-        if self.selected > len(self.application_list)-1:
+        if self.selected > len(self.application_buttons)-1:
             return None
-        return self.application_list[self.selected]
+        return self.application_buttons[self.selected].application
