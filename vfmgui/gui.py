@@ -212,6 +212,7 @@ class gui:
         self.__screen.blit(text_surface, rect)
 
     def change_selected(self, x, y):
+        selected_before = self.selected
         position_x = self.selected % 3
         if position_x + x in range(0, 3):
             self.selected += x
@@ -220,10 +221,10 @@ class gui:
 
         # Make sure the selection is within bounds
         if self.selected > len(self.application_buttons)-1:
-            self.selected = len(self.application_buttons)-1
+            self.selected = selected_before
 
         if self.selected < 0:
-            self.selected = 0
+            self.selected = selected_before
 
         # Move the screen down or up if needed
         while self.selected not in range(self.__screen_first_button, self.__screen_first_button+self.__screen_button_limit):
