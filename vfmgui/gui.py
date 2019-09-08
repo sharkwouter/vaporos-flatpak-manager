@@ -58,8 +58,6 @@ class gui:
         # Add Flathub to Flatpak and get the application list. This can take a while
         vfmflathub.add_flathub()
         self.application_list = vfmflathub.get_applications()
-        for app in self.application_list:
-            print(app.get_image())
 
         self.__run()
 
