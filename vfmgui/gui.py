@@ -37,10 +37,11 @@ class gui:
         self.__screen_width = screen_width
         self.__screen_height = screen_height
         self.__fullscreen = fullscreen
-        self.__fullscreen = fullscreen
 
         self.__grid_size = screen_width/32
         self.application_buttons = []
+        self.application_list = []
+        self.active_menu = None
 
         self.framerate = 30
         self.running = False
@@ -57,9 +58,21 @@ class gui:
 
         # Add Flathub to Flatpak and get the application list. This can take a while
         vfmflathub.add_flathub()
-        for application in vfmflathub.get_applications():
-            button = vfmgui.ApplicationButton(application)
-            self.application_buttons.append(button)
+
+        # Get the application list
+        self.application_list = vfmflathub.get_applications()
+        self.installed_application_list = []
+        # Remove installed applications from the available application list
+        for application in self.application_list:
+            if application.installed:
+                self.installed_application_list.append(application)
+                self.application_list.remove(application)
+
+        self.main_menu = vfmgui.MainMenu()
+        self.list_available_menu = vfmgui.ListMenu([])
+        self.list_installed_menu = vfmgui.ListMenu([])
+        self.active_menu = self.main_menu
+        self.previous_menu = None
 
         self.__run()
 
@@ -111,18 +124,8 @@ class gui:
         self.__screen.fill(vfmgui.Colors.BACKGROUND)
 
     def __draw_gui(self):
-        # Draw the buttons for the applications
-        for index in range(self.__screen_first_button-3, self.__screen_first_button+self.__screen_button_limit+3):
-            if index < 0 or index > len(self.application_buttons)-1:
-                continue
-            button_number = index-self.__screen_first_button
-            selected = (index == self.selected)
-            button = self.application_buttons[index]
-            button_width = self.__screen_width/3
-            button_height = (self.__screen_height-160)/3
-            button_x = button_width*(button_number % 3)
-            button_y = 80+button_height*round(button_number/3)
-            button.draw(button_x, button_y, button_width, button_height, selected, self.__screen)
+        # Draw the currently used menu, this can change
+        self.active_menu.draw(self.__screen)
 
         # Draw borders
         border_top = pygame.Rect(0, 0, self.__screen_width, 64)
@@ -141,56 +144,53 @@ class gui:
         self.__screen.blit(bottom_text, bottom_text_rect)
 
     def __read_input(self):
-        application = self.get_selected_application()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.JOYHATMOTION:
                 if event.value == (0, 1):
-                    self.change_selected(0, -1)
+                    self.active_menu.event_button_up()
                 elif event.value == (0, -1):
-                    self.change_selected(0, 1)
+                    self.active_menu.event_button_down()
                 elif event.value == (-1, 0):
-                    self.change_selected(-1, 0)
+                    self.active_menu.event_button_left()
                 elif event.value == (1, 0):
-                    self.change_selected(1, 0)
+                    self.active_menu.event_button_right()
             elif event.type == pygame.JOYAXISMOTION:
                 if event.axis == 1 and event.value < -0.5:
-                    self.change_selected(0, -1)
+                    self.active_menu.event_button_up()
                 elif event.axis == 1 and event.value > 0.5:
-                    self.change_selected(0, 1)
+                    self.active_menu.event_button_down()
                 elif event.axis == 0 and event.value < -0.5:
-                    self.change_selected(-1, 0)
+                    self.active_menu.event_button_left()
                 elif event.axis == 0 and event.value > 0.5:
-                    self.change_selected(1, 0)
+                    self.active_menu.event_button_right()
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == GamepadButton.A and not application.installed:
-                    self.__show_loading_screen("Installing...")
-                    vfmflathub.install(application)
-                elif event.button == GamepadButton.X and application.installed:
-                    self.__show_loading_screen("Uninstalling...")
-                    vfmflathub.uninstall(application)
+                if event.button == GamepadButton.A:
+                    self.__event_button_a()
+                elif event.button == GamepadButton.B:
+                    self.__event_button_b()
+                elif event.button == GamepadButton.X:
+                    self.active_menu.event_button_x()
                 elif event.button == GamepadButton.LB:
-                    self.change_selected(0, -3)
+                    self.active_menu.event_button_lb()
                 elif event.button == GamepadButton.RB:
-                    self.change_selected(0, 3)
+                    self.active_menu.event_button_rb()
                 elif event.button == GamepadButton.SEL or event.button == GamepadButton.START:
                     self.running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN and not application.installed:
-                    self.__show_loading_screen("Installing...")
-                    vfmflathub.install(application)
-                elif event.key == pygame.K_BACKSPACE and application.installed:
-                    self.__show_loading_screen("Uninstalling...")
-                    vfmflathub.uninstall(application)
+                if event.key == pygame.K_RETURN:
+                    self.__event_button_a()
+                elif event.key == pygame.K_BACKSPACE:
+                    self.__event_button_b()
                 elif event.key == pygame.K_UP:
-                    self.change_selected(0, -1)
+                    self.active_menu.event_button_up()
                 elif event.key == pygame.K_DOWN:
-                    self.change_selected(0, 1)
+                    self.active_menu.event_button_down()
                 elif event.key == pygame.K_LEFT:
-                    self.change_selected(-1, 0)
+                    self.active_menu.event_button_left()
                 elif event.key == pygame.K_RIGHT:
-                    self.change_selected(1, 0)
+                    self.active_menu.event_button_right()
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
             elif event.type == pygame.VIDEORESIZE:
@@ -208,35 +208,46 @@ class gui:
         text_rectangle.center = (x, y)
         self.__screen.blit(text_surface, text_rectangle)
 
-    def __display_text(self, text, x, y, size, text_color, font):
-        font = pygame.font.Font(font, size)
-        text_surface = font.render(text, True, text_color)
-        rect = pygame.Rect(x, y, self.__screen_width-self.__grid_size*3-x, size)
-        self.__screen.blit(text_surface, rect)
+    def __event_button_a(self):
+        selection = self.active_menu.get_selected_button()
+        if isinstance(self.active_menu, vfmgui.MainMenu):
+            if selection == vfmgui.MainMenuButtons.available_applications:
+                self.list_available_menu.set_application_list(self.application_list)
+                self.active_menu = self.list_available_menu
+            elif selection == vfmgui.MainMenuButtons.installed_applications:
+                self.list_installed_menu.set_application_list(self.installed_application_list)
+                self.active_menu = self.list_installed_menu
+            elif selection == vfmgui.MainMenuButtons.exit:
+                self.running = False
+        elif isinstance(self.active_menu, vfmgui.ListMenu):
+            application = self.active_menu.get_selected_application()
+            self.previous_menu = self.active_menu
+            self.active_menu = vfmgui.ApplicationMenu(application)
+        elif isinstance(self.active_menu, vfmgui.ApplicationMenu):
+            if selection == vfmgui.ApplicationMenuButtons.back:
+                self.__event_button_b()
+            elif selection == vfmgui.ApplicationMenuButtons.install:
+                application = self.active_menu.application
+                self.__show_loading_screen("Installing..")
+                vfmflathub.install(application)
+                application.installed = True
+                self.installed_application_list.append(application)
+                self.installed_application_list.sort()
+                self.application_list.remove(application)
+            elif selection == vfmgui.ApplicationMenuButtons.uninstall:
+                application = self.active_menu.application
+                self.__show_loading_screen("Uninstalling..")
+                vfmflathub.uninstall(application)
+                application.installed = False
+                self.application_list.append(application)
+                self.application_list.sort()
+                self.installed_application_list.remove(application)
 
-    def change_selected(self, x, y):
-        selected_before = self.selected
-        position_x = self.selected % 3
-        if position_x + x in range(0, 3):
-            self.selected += x
-        if y != 0:
-            self.selected += y * 3
+    def __event_button_b(self):
+        if isinstance(self.active_menu, vfmgui.ApplicationMenu):
+            self.active_menu = self.previous_menu
+        elif isinstance(self.active_menu, vfmgui.ListMenu):
+            self.active_menu = self.main_menu
+        elif isinstance(self.active_menu, vfmgui.MainMenu):
+            self.running = False
 
-        # Make sure the selection is within bounds
-        if self.selected > len(self.application_buttons)-1:
-            self.selected = selected_before
-
-        if self.selected < 0:
-            self.selected = selected_before
-
-        # Move the screen down or up if needed
-        while self.selected not in range(self.__screen_first_button, self.__screen_first_button+self.__screen_button_limit):
-            if self.selected < self.__screen_first_button:
-                self.__screen_first_button -= 3
-            if self.selected > self.__screen_first_button + self.__screen_button_limit-1:
-                self.__screen_first_button += 3
-
-    def get_selected_application(self):
-        if self.selected > len(self.application_buttons)-1:
-            return None
-        return self.application_buttons[self.selected].application

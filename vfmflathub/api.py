@@ -29,5 +29,3 @@ def get_applications():
         applications.append(application)
 
     return applications
-
-

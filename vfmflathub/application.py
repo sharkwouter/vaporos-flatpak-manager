@@ -32,9 +32,6 @@ class Application:
     def __str__(self):
         return self.name.title()
 
-    def __repr__(self):
-        return self.name
-
     def __lt__(self, other):
         names = [str(self), str(other)]
         names.sort()
