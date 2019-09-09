@@ -176,8 +176,10 @@ class gui:
                     self.active_menu.event_button_lb()
                 elif event.button == GamepadButton.RB:
                     self.active_menu.event_button_rb()
-                elif event.button == GamepadButton.SEL or event.button == GamepadButton.START:
+                elif event.button == GamepadButton.SEL:
                     self.running = False
+                elif event.button == GamepadButton.START:
+                    self.__event_button_a()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     self.__event_button_a()
