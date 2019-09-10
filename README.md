@@ -29,6 +29,7 @@ These features would be nice to have:
 - Create shortcuts in Steam
 - ~~Fix main menu looks at 720p~~
 - ~~add more keyboard binds~~
+- Center content on application buttons better on high resolution displays
 - Add more screenshots
 - Controller specific button prompts
 - Allow for running updates (this could initially be solved outside of the application)
