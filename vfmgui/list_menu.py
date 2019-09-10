@@ -124,3 +124,15 @@ class ListMenu(Menu):
                 else:
                     self.__screen_first_button = self.selected - (index % 3)
                 break
+
+    def go_to_letter(self, letter):
+        for index, button in enumerate(self.application_buttons):
+            current_letter = str(button.application)[0]
+            if current_letter == letter:
+                self.selected = index
+                break
+
+        if self.selected < 3:
+            self.__screen_first_button = 0
+        else:
+            self.__screen_first_button = self.selected - (index % 3)

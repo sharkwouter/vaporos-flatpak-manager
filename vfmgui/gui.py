@@ -188,8 +188,14 @@ class gui:
                     self.active_menu.event_button_left()
                 elif event.key == pygame.K_RIGHT:
                     self.active_menu.event_button_right()
+                elif event.key == pygame.K_PAGEUP:
+                    self.active_menu.event_button_lb()
+                elif event.key == pygame.K_PAGEDOWN:
+                    self.active_menu.event_button_rb()
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
+                elif event.key in range( pygame.K_a, pygame.K_z + 1 ) and isinstance(self.active_menu, vfmgui.ListMenu):
+                    self.active_menu.go_to_letter(pygame.key.name(event.key).upper())
             elif event.type == pygame.VIDEORESIZE:
                 self.__screen = pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
                 self.__screen_width, self.__screen_height = event.dict['size']
