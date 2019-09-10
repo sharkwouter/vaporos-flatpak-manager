@@ -138,11 +138,6 @@ class gui:
         title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, -10, title.get_width(), title.get_height())
         self.__screen.blit(title, title_rect)
 
-        # Draw bottom text
-        bottom_text = self.__title_font.render("A - install  X - uninstall   START - exit", True, vfmgui.Colors.TEXT_TITLE)
-        bottom_text_rect = pygame.Rect(self.__screen_width / 2 - bottom_text.get_width() / 2, self.__screen_height-bottom_text.get_height(), bottom_text.get_width(), bottom_text.get_height())
-        self.__screen.blit(bottom_text, bottom_text_rect)
-
     def __read_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
