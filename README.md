@@ -27,8 +27,8 @@ Before VaporOS Flatpak Manager can be considered done, the following changes wil
 These features would be nice to have:
 
 - Create shortcuts in Steam
-- Fix main menu looks at 720p
-- Add more keyboard binds
+- ~~Fix main menu looks at 720p~~
+- ~~add more keyboard binds~~
 - Add more screenshots
 - Controller specific button prompts
 - Allow for running updates (this could initially be solved outside of the application)
