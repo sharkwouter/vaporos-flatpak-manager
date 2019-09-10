@@ -21,7 +21,7 @@ class Application:
         directory = user_cache_dir("vfm", "vaporos")
         filename = "{}/{}.png".format(directory, self.flatpak_id)
         if not os.path.exists(directory):
-            os.makedirs(directory)
+            os.makedirs(directory, exist_ok=True)
         if not os.path.isfile(filename):
             download = requests.get(self.image_url)
             with open(filename, "wb") as writer:
