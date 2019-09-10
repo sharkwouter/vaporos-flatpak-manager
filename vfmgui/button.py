@@ -21,11 +21,16 @@ class Button:
         width -= 2
         height -= 2
 
-        # Draw the background of the button
-        rect_button = pygame.Rect(x, y, width, height)
-        pygame.draw.rect(screen, button_color, rect_button)
-
-        # Draw the text
         text = self.font.render(self.text, True, text_color, button_color)
-        rect_text = pygame.Rect(x+width/2-text.get_width()/2, y+height/2-text.get_height()/2, text.get_width(), text.get_height())
+
+        # Make sure the text is never wider than the button
+        if text.get_width() > width:
+            width = text.get_width()
+
+        rect_text = pygame.Rect(x + width / 2 - text.get_width() / 2, y + height / 2 - text.get_height() / 2,
+                                    text.get_width(), text.get_height())
+        rect_button = pygame.Rect(x, y, width, height)
+
+        # Draw everything
+        pygame.draw.rect(screen, button_color, rect_button)
         screen.blit(text, rect_text)
