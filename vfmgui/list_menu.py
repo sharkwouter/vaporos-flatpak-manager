@@ -130,9 +130,8 @@ class ListMenu(Menu):
             current_letter = str(button.application)[0]
             if current_letter == letter:
                 self.selected = index
+                if self.selected < 3:
+                    self.__screen_first_button = 0
+                else:
+                    self.__screen_first_button = self.selected - (index % 3)
                 break
-
-        if self.selected < 3:
-            self.__screen_first_button = 0
-        else:
-            self.__screen_first_button = self.selected - (index % 3)
