@@ -199,7 +199,7 @@ class gui:
         self.__clock.tick(self.framerate)
 
     def __display_text_centered(self, text, x, y, size, text_color, font):
-        font = pygame.font.Font(font, size)
+        font = pygame.font.Font(font, int(size))
         text_surface = font.render(text, True, text_color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = (x, y)

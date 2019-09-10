@@ -1,6 +1,7 @@
 from vfmgui.menu import Menu
 import vfmgui
 import pygame
+import math
 
 
 class ListMenu(Menu):
@@ -35,7 +36,7 @@ class ListMenu(Menu):
             button_width = screen_width/3
             button_height = (screen_height-160)/3
             button_x = button_width*(button_number % 3)
-            button_y = 80+button_height*round(button_number/3)
+            button_y = 80+button_height*math.floor(button_number/3)
             button.draw(button_x, button_y, button_width, button_height, selected, screen)
 
     def get_selected_application(self):

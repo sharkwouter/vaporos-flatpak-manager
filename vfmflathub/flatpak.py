@@ -14,6 +14,8 @@ def get_installed_applications():
     command = ["flatpak", "list","--user", "--app"]
     installed_list = []
     for line in subprocess.check_output(command).splitlines():
+        if isinstance(line, bytes):
+            line = line.decode("utf-8")
         if meets_version_requirement("1.1.0"):
             name_description, flatpak_id, version, branch, arch, origin = line.split("\t", 5)
             installed_list.append(flatpak_id)
@@ -30,7 +32,8 @@ def get_flatpak_version():
     if return_value != 0:
         raise Exception("Error: Failed to run flatpak")
     output = subprocess.check_output(command).splitlines()
-    version = output[0].split(" ")[1]
+    version_string = output[0].decode("utf-8")
+    version = version_string.split(" ")[1]
     return version
 
 

@@ -19,9 +19,9 @@ class Application:
 
     def get_image(self):
         directory = user_cache_dir("vfm", "vaporos")
-        filename = "{}/{}.png".format(directory, self.flatpak_id)
+        filename = os.path.join(directory, self.flatpak_id)
         if not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
+            os.makedirs(directory)
         if not os.path.isfile(filename):
             download = requests.get(self.image_url)
             with open(filename, "wb") as writer:
@@ -30,7 +30,8 @@ class Application:
         return filename
 
     def __str__(self):
-        return self.name.title()
+        # This one makes sure there are no non-ascii characters in the string, for python 2 compatibility
+        return ''.join([i if ord(i) < 128 else ' ' for i in self.name]).title()
 
     def __lt__(self, other):
         names = [str(self), str(other)]

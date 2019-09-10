@@ -1,6 +1,6 @@
 import pygame
 import vfmgui
-import thread
+import threading
 
 
 class ApplicationButton:
@@ -56,10 +56,8 @@ class ApplicationButton:
 
         # Download the image in another thread
         if self.image is None and not self.invalid_image and not self.getting_image:
-            try:
-                thread.start_new_thread(self.__set_image, ())
-            except:
-                print("Error: start image downloading thread")
+            thread = threading.Thread(target=self.__set_image)
+            thread.start()
 
         # Create the different rectangles to draw different elements in
         rect_button = pygame.Rect(x, y, width, height)

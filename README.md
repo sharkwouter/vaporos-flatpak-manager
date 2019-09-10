@@ -1,5 +1,5 @@
 # VaporOS Flatpak Manager
-VaporOS Flatpak Manager allows you to easily install software on SteamOS through Flatpak. It doesn't require a mouse and keyboard, since it can also be controller with a gamepad. It has been created using Python 2.7 and the pygame engine.
+VaporOS Flatpak Manager allows you to easily install software on SteamOS through Flatpak. It doesn't require a mouse and keyboard, since it can also be controller with a gamepad. It has been created using Python and the pygame engine.
 
 ### Screenshot
 
@@ -17,7 +17,7 @@ VaporOS Flatpak Manager requires the following python packages to be installed:
 
 Before VaporOS Flatpak Manager can be considered done, the following changes will need to be made:
 
-- Make compatible with python 3 by using the ``threading`` module
+- ~~Make compatible with python 3 by using the ``threading`` module~~
 - Show installation progress
 - Prevent inputs from being registered multiple times
 - Add button prompts to the bottom bar

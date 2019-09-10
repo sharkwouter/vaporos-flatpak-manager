@@ -14,8 +14,8 @@ def get_applications():
     # Create application objects based on the data received from the API
     for entry in response.json():
         app_id = entry['flatpakAppId']
-        name = entry['name'].encode('utf-8')
-        description = entry['summary'].encode('utf-8')
+        name = entry['name']
+        description = entry['summary']
         version = entry['currentReleaseVersion']
         image_url = entry['iconDesktopUrl']
 
