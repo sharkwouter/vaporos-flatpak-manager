@@ -1,10 +1,12 @@
 from vfmgui.menu import Menu
 import vfmgui
 
+
 class MainMenuButtons:
     available_applications = "Available Applications"
     installed_applications = "Installed Applications"
     exit = "Exit"
+
 
 class MainMenu(Menu):
     def __init__(self):

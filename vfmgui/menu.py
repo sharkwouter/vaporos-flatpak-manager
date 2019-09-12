@@ -1,4 +1,3 @@
-
 class Menu:
 
     def event_button_up(self):

@@ -3,6 +3,7 @@ import vfmflathub
 import os
 import vfmgui
 
+
 class Image:
     LOGO = "/usr/share/pixmaps/vaporos-flatpak-manager.png"
     if not os.path.isfile(LOGO):
