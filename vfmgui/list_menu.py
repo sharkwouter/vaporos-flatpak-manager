@@ -89,7 +89,7 @@ class ListMenu(Menu):
     def event_button_right(self):
         self.__change_selected(1, 0)
 
-    def event_button_lb(self):
+    def event_button_lt(self):
         application = self.get_selected_application()
         letter = str(application)[0]
         letters_found = []
@@ -110,7 +110,7 @@ class ListMenu(Menu):
                     self.__screen_first_button = self.selected - ((index+1) % 3)
                 break
 
-    def event_button_rb(self):
+    def event_button_rt(self):
         application = self.get_selected_application()
         letter = str(application)[0]
         for index in range(self.selected, len(self.application_buttons)):
@@ -124,6 +124,12 @@ class ListMenu(Menu):
                 else:
                     self.__screen_first_button = self.selected - (index % 3)
                 break
+
+    def event_button_lb(self):
+        self.event_button_lt()
+
+    def event_button_rb(self):
+        self.event_button_rt()
 
     def go_to_letter(self, letter):
         for index, button in enumerate(self.application_buttons):

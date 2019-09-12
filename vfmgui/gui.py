@@ -32,7 +32,7 @@ class Axis:
 
 class gui:
 
-    def __init__(self, application_name="VaporOS Flatpak Manager", screen_width=1920, screen_height=1080, fullscreen=True):
+    def __init__(self, application_name="VaporOS Flatpak Manager", screen_width=1920, screen_height=1080, fullscreen=False):
         self.application_name = application_name
         self.__screen_width = screen_width
         self.__screen_height = screen_height
@@ -49,6 +49,8 @@ class gui:
         self.__screen_button_limit = 9
         self.__screen_first_button = 0
         self.selected = 0
+
+        self.input_wait = 0
 
     def run(self):
         self.running = True
@@ -89,8 +91,8 @@ class gui:
 
     def __setup_joysticks(self):
         pygame.joystick.init()
-        joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-        for joystick in joysticks:
+        self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+        for joystick in self.joysticks:
             joystick.init()
 
     def __show_splash_screen(self):
@@ -139,6 +141,34 @@ class gui:
         self.__screen.blit(title, title_rect)
 
     def __read_input(self):
+        # Handle analog stick and trigger input. It has to wait a little before responding to an input a second time
+        for joystick in self.joysticks:
+            axis_x = joystick.get_axis(0)
+            axis_y = joystick.get_axis(1)
+            axis_amount = joystick.get_numaxes()
+            wait_time = 7
+            if self.input_wait > 0:
+                # wait a shorter amount of time if the analog stick is pushed further
+                self.input_wait -= 1
+            elif axis_y < -0.5:
+                self.active_menu.event_button_up()
+                self.input_wait = wait_time
+            elif axis_y > 0.5:
+                self.active_menu.event_button_down()
+                self.input_wait = wait_time
+            elif axis_x < -0.5:
+                self.active_menu.event_button_left()
+                self.input_wait = wait_time
+            elif axis_x > 0.5:
+                self.active_menu.event_button_right()
+                self.input_wait = wait_time
+            elif axis_amount > 4 and joystick.get_axis(2) > 0.8:
+                self.active_menu.event_button_lt()
+                self.input_wait = wait_time
+            elif axis_amount > 4 and joystick.get_axis(5) > 0.8:
+                self.active_menu.event_button_rt()
+                self.input_wait = wait_time
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -151,15 +181,6 @@ class gui:
                     self.active_menu.event_button_left()
                 elif event.value == (1, 0):
                     self.active_menu.event_button_right()
-            elif event.type == pygame.JOYAXISMOTION:
-                if event.axis == 1 and event.value < -0.5:
-                    self.active_menu.event_button_up()
-                elif event.axis == 1 and event.value > 0.5:
-                    self.active_menu.event_button_down()
-                elif event.axis == 0 and event.value < -0.5:
-                    self.active_menu.event_button_left()
-                elif event.axis == 0 and event.value > 0.5:
-                    self.active_menu.event_button_right()
             elif event.type == pygame.JOYBUTTONDOWN:
                 if event.button == GamepadButton.A:
                     self.__event_button_a()
@@ -167,6 +188,8 @@ class gui:
                     self.__event_button_b()
                 elif event.button == GamepadButton.X:
                     self.active_menu.event_button_x()
+                elif event.button == GamepadButton.Y:
+                    self.active_menu.event_button_y()
                 elif event.button == GamepadButton.LB:
                     self.active_menu.event_button_lb()
                 elif event.button == GamepadButton.RB:
@@ -189,9 +212,9 @@ class gui:
                 elif event.key == pygame.K_RIGHT:
                     self.active_menu.event_button_right()
                 elif event.key == pygame.K_PAGEUP:
-                    self.active_menu.event_button_lb()
+                    self.active_menu.event_button_lt()
                 elif event.key == pygame.K_PAGEDOWN:
-                    self.active_menu.event_button_rb()
+                    self.active_menu.event_button_rt()
                 elif event.key == pygame.K_ESCAPE:
                     self.running = False
                 elif event.key in range( pygame.K_a, pygame.K_z + 1 ) and isinstance(self.active_menu, vfmgui.ListMenu):
