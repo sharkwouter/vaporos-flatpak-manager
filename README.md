@@ -19,7 +19,7 @@ Before VaporOS Flatpak Manager can be considered done, the following changes wil
 
 - ~~Make compatible with python 3 by using the ``threading`` module~~
 - Show installation progress
-- Prevent inputs from being registered multiple times
+- ~~Prevent inputs from being registered multiple times~~
 - Add button prompts to the bottom bar
 - Package for Arch
 - Delete runtimes which are no longer needed when uninstalling software
