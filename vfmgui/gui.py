@@ -66,11 +66,10 @@ class gui:
         for application in self.application_list:
             if application.installed:
                 self.installed_application_list.append(application)
-                self.application_list.remove(application)
 
         self.main_menu = vfmgui.MainMenu()
-        self.list_available_menu = vfmgui.ListMenu([])
-        self.list_installed_menu = vfmgui.ListMenu([])
+        self.list_available_menu = vfmgui.ListMenu(self.application_list)
+        self.list_installed_menu = vfmgui.ListMenu(self.installed_application_list)
         self.active_menu = self.main_menu
         self.previous_menu = None
 
@@ -216,10 +215,8 @@ class gui:
         selection = self.active_menu.get_selected_button()
         if isinstance(self.active_menu, vfmgui.MainMenu):
             if selection == vfmgui.MainMenuButtons.available_applications:
-                self.list_available_menu.set_application_list(self.application_list)
                 self.active_menu = self.list_available_menu
             elif selection == vfmgui.MainMenuButtons.installed_applications:
-                self.list_installed_menu.set_application_list(self.installed_application_list)
                 self.active_menu = self.list_installed_menu
             elif selection == vfmgui.MainMenuButtons.exit:
                 self.running = False
@@ -237,15 +234,14 @@ class gui:
                 application.installed = True
                 self.installed_application_list.append(application)
                 self.installed_application_list.sort()
-                self.application_list.remove(application)
+                self.list_installed_menu.set_application_list(self.installed_application_list)
             elif selection == vfmgui.ApplicationMenuButtons.uninstall:
                 application = self.active_menu.application
                 self.__show_loading_screen("Uninstalling..")
                 vfmflathub.uninstall(application)
                 application.installed = False
-                self.application_list.append(application)
-                self.application_list.sort()
                 self.installed_application_list.remove(application)
+                self.list_installed_menu.set_application_list(self.installed_application_list)
 
     def __event_button_b(self):
         if isinstance(self.active_menu, vfmgui.ApplicationMenu):
