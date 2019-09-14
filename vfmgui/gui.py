@@ -246,24 +246,25 @@ class gui:
                 self.running = False
         elif isinstance(self.active_menu, vfmgui.ListMenu):
             application = self.active_menu.get_selected_application()
-            self.previous_menu = self.active_menu
-            self.active_menu = vfmgui.ApplicationMenu(application)
+            if not application.busy:
+                self.previous_menu = self.active_menu
+                self.active_menu = vfmgui.ApplicationMenu(application)
         elif isinstance(self.active_menu, vfmgui.ApplicationMenu):
             if selection == vfmgui.ApplicationMenuButtons.back:
                 self.__event_button_b()
             elif selection == vfmgui.ApplicationMenuButtons.install:
                 application = self.active_menu.application
-                self.__show_loading_screen("Installing..")
                 application.install()
                 self.installed_application_list.append(application)
                 self.installed_application_list.sort()
                 self.list_installed_menu.set_application_list(self.installed_application_list)
+                self.__event_button_b()
             elif selection == vfmgui.ApplicationMenuButtons.uninstall:
                 application = self.active_menu.application
-                self.__show_loading_screen("Uninstalling..")
                 application.uninstall()
                 self.installed_application_list.remove(application)
                 self.list_installed_menu.set_application_list(self.installed_application_list)
+                self.__event_button_b()
 
     def __event_button_b(self):
         if isinstance(self.active_menu, vfmgui.ApplicationMenu):

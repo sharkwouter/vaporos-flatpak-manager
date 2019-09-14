@@ -1,3 +1,7 @@
+import sys
+import time
+from io import BytesIO
+
 import requests
 from appdirs import user_cache_dir
 import os
@@ -43,9 +47,8 @@ class Application:
         if self.installed:
             print("Error: {} is already installed".format(self.name))
             return False
-        vfmflathub.install(self)
-        self.installed = True
-        self.busy = False
+        thread = threading.Thread(target=self.__track_progress, args=(vfmflathub.install(self),))
+        thread.start()
 
     def uninstall(self):
         if not self.busy:
@@ -57,9 +60,28 @@ class Application:
         if not self.installed:
             print("Error: {} is not installed".format(self.name))
             return False
-        vfmflathub.uninstall(self)
-        self.installed = False
+        thread = threading.Thread(target=self.__track_progress, args=(vfmflathub.uninstall(self),))
+        thread.start()
+
+    def __track_progress(self, subprocess):
+        if not self.busy or subprocess is None:
+            return -1
+        buf = BytesIO()
+        while subprocess.poll() is None:
+            if self.installed:
+                time.sleep(1)
+                continue
+            out = subprocess.stdout.read(1)
+            buf.write(out)
+            if out in (b'\r', b'\n'):
+                print(buf.getvalue())
+                for value in buf.getvalue().split():
+                    if "%" in value:
+                        self.progress = int(value.replace("%",""))
+                buf.truncate(0)
+        self.installed = (not self.installed)
         self.busy = False
+        self.progress = -1
 
     def __str__(self):
         # This one makes sure there are no non-ascii characters in the string, for python 2 compatibility

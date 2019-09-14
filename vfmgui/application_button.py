@@ -83,8 +83,16 @@ class ApplicationButton:
             rect_title = pygame.Rect(x + width / 2 - title.get_width() / 2, y + height - title.get_height() - 16, title.get_width(),
                                           title.get_height())
 
-        # Draw everything
+        # Draw button
         pygame.draw.rect(screen, button_color, rect_button)
+
+        # Draw installation progress
+        if self.application.busy and self.application.progress != -1:
+            rect_progress = pygame.Rect(x , y, (width + 2) / 100 * self.application.progress, height)
+            pygame.draw.rect(screen, vfmgui.Colors.BUTTON_PROGRESS, rect_progress)
+
+        # Draw image
         if self.image is not None:
             screen.blit(self.image, rect_image)
+        # Draw text
         screen.blit(title, rect_title)

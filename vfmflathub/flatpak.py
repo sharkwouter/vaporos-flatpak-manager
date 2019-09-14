@@ -55,11 +55,7 @@ def meets_version_requirement(version):
 
 
 def install(application):
-    return_value = subprocess.call(["flatpak", "install", "--user", "-y", "flathub", application.flatpak_id])
-    if return_value != 0:
-        raise Exception("Error: Failed to install application {}".format(application.flatpak_id))
-    print("{} was successfully installed".format(application.flatpak_id))
-    application.installed = True
+    return subprocess.Popen(["flatpak", "install", "--user", "-y", "flathub", application.flatpak_id], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 def uninstall(application):
@@ -68,9 +64,4 @@ def uninstall(application):
         command = ["flatpak", "uninstall", "--user", "-y", application.flatpak_id]
     else:
         command = ["flatpak", "uninstall", "--user", application.flatpak_id]
-
-    return_value = subprocess.call(command)
-    if return_value != 0:
-        raise Exception("Error: Failed to uninstall application {}".format(application.flatpak_id))
-    print("{} was successfully uninstalled".format(application.flatpak_id))
-    application.installed = False
+    return subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

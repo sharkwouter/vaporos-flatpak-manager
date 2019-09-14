@@ -8,3 +8,4 @@ class Colors:
     TEXT_TITLE = 252, 252, 252
     TEXT_SUBTITLE = 55, 141, 181
     TEXT = 252, 252, 252
+    BUTTON_PROGRESS = 0, 204, 0
