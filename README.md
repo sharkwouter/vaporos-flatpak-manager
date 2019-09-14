@@ -13,6 +13,11 @@ VaporOS Flatpak Manager requires the following python packages to be installed:
 - requests
 - appdirs
 
+And the following additional software:
+
+- Flatpak
+- The Liberation Sans Narrow font
+
 ### TODO
 
 Before VaporOS Flatpak Manager can be considered done, the following changes will need to be made:
