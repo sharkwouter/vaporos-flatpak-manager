@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
     name="VaporOS-flatpak-manager",
-    version="1.0",
+    version="2.0",
     packages=find_packages(),
     scripts=["vaporos-flatpak-manager"],
 
@@ -13,6 +13,8 @@ setup(
 
     install_requires=[
           'pygame',
+          'appdirs',
+          'requests',
       ],
 
     #metadata
