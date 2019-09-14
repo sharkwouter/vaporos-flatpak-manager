@@ -37,7 +37,7 @@ These features would be nice to have:
 - Controller specific button prompts
 - Allow for running updates (this could initially be solved outside of the application)
 - ~~Allow software installation to happen in the background~~
-- Package for Arch
+- ~~Package for Arch~~
 - Delete runtimes which are no longer needed when uninstalling software
 
 ### Licensing on Assets
