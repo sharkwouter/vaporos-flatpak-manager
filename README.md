@@ -18,14 +18,12 @@ VaporOS Flatpak Manager requires the following python packages to be installed:
 Before VaporOS Flatpak Manager can be considered done, the following changes will need to be made:
 
 - ~~Make compatible with python 3 by using the ``threading`` module~~
-- Show installation progress
+- ~~Show installation progress~~
 - ~~Prevent inputs from being registered multiple times~~
-- Add button prompts to the bottom bar
-- Package for Arch
-- Delete runtimes which are no longer needed when uninstalling software
 
 These features would be nice to have:
 
+- Add button prompts to the bottom bar
 - Create shortcuts in Steam
 - ~~Fix main menu looks at 720p~~
 - ~~add more keyboard binds~~
@@ -33,7 +31,9 @@ These features would be nice to have:
 - Add more screenshots
 - Controller specific button prompts
 - Allow for running updates (this could initially be solved outside of the application)
-- Allow software installation to happen in the background
+- ~~Allow software installation to happen in the background~~
+- Package for Arch
+- Delete runtimes which are no longer needed when uninstalling software
 
 ### Licensing on Assets
 
