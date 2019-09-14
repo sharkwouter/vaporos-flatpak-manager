@@ -6,7 +6,7 @@ import pygame
 class ApplicationMenuButtons:
     install = "Install"
     uninstall = "Uninstall"
-    back = "back"
+    back = "Back"
 
 
 class ApplicationMenu(Menu):
