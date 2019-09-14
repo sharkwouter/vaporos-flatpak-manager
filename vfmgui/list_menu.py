@@ -40,7 +40,10 @@ class ListMenu(Menu):
             button.draw(button_x, button_y, button_width, button_height, selected, screen)
 
     def get_selected_application(self):
-        return self.application_buttons[self.selected].application
+        if len(self.application_buttons) > 0:
+            return self.application_buttons[self.selected].application
+        else:
+            return None
 
     def get_selected_button(self):
         self.get_selected_application()

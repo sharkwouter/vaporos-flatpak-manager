@@ -235,7 +235,7 @@ class gui:
                 self.running = False
         elif isinstance(self.active_menu, vfmgui.ListMenu):
             application = self.active_menu.get_selected_application()
-            if not application.busy:
+            if application and not application.busy:
                 self.previous_menu = self.active_menu
                 self.active_menu = vfmgui.ApplicationMenu(application)
         elif isinstance(self.active_menu, vfmgui.ApplicationMenu):
