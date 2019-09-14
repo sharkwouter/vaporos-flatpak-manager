@@ -1,6 +1,8 @@
 import requests
 from appdirs import user_cache_dir
 import os
+import vfmflathub
+import threading
 
 
 class Application:
@@ -11,6 +13,8 @@ class Application:
         self.description = description
         self.latest_version = latest_version
         self.installed = installed
+        self.busy = False
+        self.progress = -1
 
         if image_url.startswith("/"):
             self.image_url = "https://flathub.org{}".format(image_url)
@@ -28,6 +32,34 @@ class Application:
                 writer.write(download.content)
                 writer.close()
         return filename
+
+    def install(self):
+        if not self.busy:
+            self.busy = True
+        else:
+            print("Error: {} is already being installed".format(self.name))
+            return False
+
+        if self.installed:
+            print("Error: {} is already installed".format(self.name))
+            return False
+        vfmflathub.install(self)
+        self.installed = True
+        self.busy = False
+
+    def uninstall(self):
+        if not self.busy:
+            self.busy = True
+        else:
+            print("Error: {} is already being uninstalled".format(self.name))
+            return False
+
+        if not self.installed:
+            print("Error: {} is not installed".format(self.name))
+            return False
+        vfmflathub.uninstall(self)
+        self.installed = False
+        self.busy = False
 
     def __str__(self):
         # This one makes sure there are no non-ascii characters in the string, for python 2 compatibility

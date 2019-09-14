@@ -254,16 +254,14 @@ class gui:
             elif selection == vfmgui.ApplicationMenuButtons.install:
                 application = self.active_menu.application
                 self.__show_loading_screen("Installing..")
-                vfmflathub.install(application)
-                application.installed = True
+                application.install()
                 self.installed_application_list.append(application)
                 self.installed_application_list.sort()
                 self.list_installed_menu.set_application_list(self.installed_application_list)
             elif selection == vfmgui.ApplicationMenuButtons.uninstall:
                 application = self.active_menu.application
                 self.__show_loading_screen("Uninstalling..")
-                vfmflathub.uninstall(application)
-                application.installed = False
+                application.uninstall()
                 self.installed_application_list.remove(application)
                 self.list_installed_menu.set_application_list(self.installed_application_list)
 
