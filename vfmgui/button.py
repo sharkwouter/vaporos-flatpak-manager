@@ -5,7 +5,7 @@ import vfmgui
 class Button:
     def __init__(self, text):
         self.text = text
-        self.font = pygame.font.Font(vfmgui.Fonts.REGULAR, 64)
+        self.font = vfmgui.Fonts.REGULAR
 
     def draw(self, x, y, width, height, selected, screen):
         if selected:

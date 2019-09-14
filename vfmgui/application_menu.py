@@ -17,8 +17,8 @@ class ApplicationMenu(Menu):
         self.buttons = []
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.install))
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.back))
-        self.font_title = pygame.font.Font(vfmgui.Fonts.REGULAR, 64)
-        self.font_small = pygame.font.Font(vfmgui.Fonts.REGULAR, 48)
+        self.font_title = vfmgui.Fonts.REGULAR
+        self.font_small = vfmgui.Fonts.REGULAR
 
         try:
             loaded_image = pygame.image.load(self.application.get_image())

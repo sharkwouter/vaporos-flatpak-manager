@@ -9,7 +9,7 @@ class ListMenu(Menu):
         self.__screen_button_limit = 9
         self.__screen_first_button = 0
         self.selected = 0
-        self.font = pygame.font.Font(vfmgui.Fonts.REGULAR, 64)
+        self.font = vfmgui.Fonts.REGULAR
 
         self.application_buttons = []
 

@@ -74,8 +74,9 @@ class Application:
             out = subprocess.stdout.read(1)
             buf.write(out)
             if out in (b'\r', b'\n'):
-                print(buf.getvalue())
                 for value in buf.getvalue().split():
+                    if isinstance(value, bytes):
+                        value = value.decode()
                     if "%" in value:
                         self.progress = int(value.replace("%",""))
                 buf.truncate(0)

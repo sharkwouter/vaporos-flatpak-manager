@@ -39,7 +39,6 @@ class gui:
         self.__screen_height = screen_height
         self.__fullscreen = fullscreen
 
-        self.__grid_size = screen_width/32
         self.application_buttons = []
         self.application_list = []
         self.active_menu = None
@@ -88,7 +87,7 @@ class gui:
         pygame.display.set_caption(self.application_name)
         self.__clock = pygame.time.Clock()
 
-        self.__title_font = pygame.font.Font(vfmgui.Fonts.REGULAR, 64)
+        self.__title_font = vfmgui.Fonts.REGULAR
 
     def __setup_joysticks(self):
         pygame.joystick.init()
@@ -105,15 +104,12 @@ class gui:
         logo_rect = pygame.Rect(logo_x, logo_y, logo.get_width(), logo.get_height())
         self.__screen.blit(logo, logo_rect)
 
-        # draw title
-        self.__display_text_centered(self.application_name, self.__screen_width / 2, self.__screen_height - self.__grid_size,
-                                     self.__grid_size, vfmgui.Colors.TEXT, vfmgui.Fonts.REGULAR)
-        self.__update_screen()
+        # Draw title
+        title = vfmgui.Fonts.LARGE.render(self.application_name, True, vfmgui.Colors.TEXT_TITLE)
+        title_rect = pygame.Rect(self.__screen_width / 2 - title.get_width() / 2, self.__screen_width / 2 - title.get_height() / 2, title.get_width(),
+                                 title.get_height())
+        self.__screen.blit(title, title_rect)
 
-    def __show_loading_screen(self, text):
-        self.__draw_background()
-        self.__display_text_centered(text, self.__screen_width / 2, self.__screen_height/2,
-                                     self.__grid_size*2, vfmgui.Colors.TEXT, vfmgui.Fonts.REGULAR)
         self.__update_screen()
 
     def __run(self):
@@ -227,13 +223,6 @@ class gui:
     def __update_screen(self):
         pygame.display.update()
         self.__clock.tick(self.framerate)
-
-    def __display_text_centered(self, text, x, y, size, text_color, font):
-        font = pygame.font.Font(font, int(size))
-        text_surface = font.render(text, True, text_color)
-        text_rectangle = text_surface.get_rect()
-        text_rectangle.center = (x, y)
-        self.__screen.blit(text_surface, text_rectangle)
 
     def __event_button_a(self):
         selection = self.active_menu.get_selected_button()
