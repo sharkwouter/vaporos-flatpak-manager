@@ -43,4 +43,4 @@ These features would be nice to have:
 
 ### Licensing on Assets
 
-The icon data/vaporos-flatpak-manager.png was found on (Wikimedia)(https://commons.wikimedia.org/wiki/File:Storage_icon.svg), created by PanierAvide and licensed under the [Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/deed.en) license.
+The icon data/vaporos-flatpak-manager.png was found on [Wikimedia](https://commons.wikimedia.org/wiki/File:Storage_icon.svg), created by PanierAvide and licensed under the [Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/deed.en) license.
