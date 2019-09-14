@@ -38,7 +38,8 @@ These features would be nice to have:
 - Allow for running updates (this could initially be solved outside of the application)
 - ~~Allow software installation to happen in the background~~
 - ~~Package for Arch~~
-- Delete runtimes which are no longer needed when uninstalling software
+- Delete runtimes which are no longer needed when uninstalling software (This is not possible on SteamOS)
+- Add launch button for installed applications
 
 ### Licensing on Assets
 
