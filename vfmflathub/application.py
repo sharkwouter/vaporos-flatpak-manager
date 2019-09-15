@@ -76,7 +76,7 @@ class Application:
             if out in (b'\r', b'\n'):
                 for value in buf.getvalue().split():
                     if isinstance(value, bytes):
-                        value = value.decode()
+                        value = value.decode("utf-8")
                     if "%" in value:
                         self.progress = int(value.replace("%",""))
                 buf.truncate(0)
