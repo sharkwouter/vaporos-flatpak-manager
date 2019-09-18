@@ -31,22 +31,16 @@ class ApplicationMenu(Menu):
         screen_width, screen_height = screen.get_size()
         item_height = (screen_height-160)/7
 
-        # Draw application name
-        text = self.font_title.render(str(self.application), True, vfmgui.Colors.TEXT_SUBTITLE)
-        rect_text = pygame.Rect(screen_width / 2 - text.get_width() / 2, 80 + item_height * 1 - text.get_height() / 2,
-                                text.get_width(), text.get_height())
-        screen.blit(text, rect_text)
-
         # Draw application description
         text = self.font_small.render(self.application.description, True, vfmgui.Colors.TEXT_SUBTITLE)
         rect_text = pygame.Rect(screen_width / 2 - text.get_width() / 2,
-                                80 + item_height * 2 - text.get_height() / 2,
+                                80,
                                 text.get_width(), text.get_height())
         screen.blit(text, rect_text)
 
         # Draw image
         if self.image is not None:
-            rect_image = pygame.Rect(screen_width / 2 - 64, 80+item_height*3, 128, 128)
+            rect_image = pygame.Rect(screen_width / 2 - 64, 80+item_height, 128, 128)
             screen.blit(self.image, rect_image)
 
         # Draw buttons
