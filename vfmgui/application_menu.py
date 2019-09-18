@@ -10,9 +10,10 @@ class ApplicationMenuButtons:
 
 
 class ApplicationMenu(Menu):
-    def __init__(self, application):
+    def __init__(self, title,  application):
         self.selected = 0
         self.application = application
+        self.title = title
 
         self.buttons = []
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.install))

@@ -69,9 +69,9 @@ class gui:
             if application.installed:
                 self.installed_application_list.append(application)
 
-        self.main_menu = vfmgui.MainMenu()
-        self.list_available_menu = vfmgui.ListMenu(self.application_list)
-        self.list_installed_menu = vfmgui.ListMenu(self.installed_application_list)
+        self.main_menu = vfmgui.MainMenu(self.application_name)
+        self.list_available_menu = vfmgui.ListMenu(vfmgui.MainMenuButtons.available_applications, self.application_list)
+        self.list_installed_menu = vfmgui.ListMenu(vfmgui.MainMenuButtons.installed_applications, self.installed_application_list)
         self.active_menu = self.main_menu
         self.previous_menu = None
 
@@ -133,7 +133,7 @@ class gui:
         pygame.draw.rect(self.__screen, vfmgui.Colors.BORDER, border_bottom)
 
         # Draw title
-        title = self.__title_font.render(self.application_name, True, vfmgui.Colors.TEXT_TITLE)
+        title = self.__title_font.render(self.active_menu.title, True, vfmgui.Colors.TEXT_TITLE)
         title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, -10, title.get_width(), title.get_height())
         self.__screen.blit(title, title_rect)
 
@@ -237,7 +237,7 @@ class gui:
             application = self.active_menu.get_selected_application()
             if application and not application.busy:
                 self.previous_menu = self.active_menu
-                self.active_menu = vfmgui.ApplicationMenu(application)
+                self.active_menu = vfmgui.ApplicationMenu(str(application), application)
         elif isinstance(self.active_menu, vfmgui.ApplicationMenu):
             if selection == vfmgui.ApplicationMenuButtons.back:
                 self.__event_button_b()
@@ -262,4 +262,3 @@ class gui:
             self.active_menu = self.main_menu
         elif isinstance(self.active_menu, vfmgui.MainMenu):
             self.running = False
-

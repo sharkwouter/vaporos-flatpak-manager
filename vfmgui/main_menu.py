@@ -9,10 +9,11 @@ class MainMenuButtons:
 
 
 class MainMenu(Menu):
-    def __init__(self):
+    def __init__(self, title):
         self.__screen_button_limit = 3
         self.__screen_first_button = 0
         self.selected = 0
+        self.title = title
 
         self.buttons = []
         self.buttons.append(vfmgui.Button(MainMenuButtons.available_applications))

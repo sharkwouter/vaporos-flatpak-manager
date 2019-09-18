@@ -5,11 +5,12 @@ import math
 
 
 class ListMenu(Menu):
-    def __init__(self, application_list):
+    def __init__(self, title, application_list):
         self.__screen_button_limit = 9
         self.__screen_first_button = 0
         self.selected = 0
         self.font = vfmgui.Fonts.REGULAR
+        self.title = title
 
         self.application_buttons = []
 
