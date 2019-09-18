@@ -80,7 +80,7 @@ class gui:
     def __setup_pygame(self):
         pygame.init()
         if self.__fullscreen:
-            self.__screen = pygame.display.set_mode((0, 0), pygame.NOFRAME | pygame.HWSURFACE | pygame.DOUBLEBUF)
+            self.__screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
             self.__screen_width, self.__screen_height = self.__screen.get_size()
         else:
             self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height), pygame.RESIZABLE)
@@ -137,6 +137,13 @@ class gui:
         title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, -10, title.get_width(), title.get_height())
         self.__screen.blit(title, title_rect)
 
+        # Draw button prompts at the bottom
+        prompt = self.__title_font.render(self.__get_button_prompt(), True, vfmgui.Colors.TEXT_TITLE)
+        prompt_rect = pygame.Rect(self.__screen_width / 2 - prompt.get_width() / 2, self.__screen_height - prompt.get_height(), prompt.get_width(),
+                                 prompt.get_height())
+        self.__screen.blit(prompt, prompt_rect)
+
+
     def __read_input(self):
         # Handle analog stick and trigger input. It has to wait a little before responding to an input a second time
         for joystick in self.joysticks:
@@ -191,10 +198,6 @@ class gui:
                     self.active_menu.event_button_lb()
                 elif event.button == GamepadButton.RB:
                     self.active_menu.event_button_rb()
-                elif event.button == GamepadButton.SEL:
-                    self.running = False
-                elif event.button == GamepadButton.START:
-                    self.__event_button_a()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     self.__event_button_a()
@@ -263,5 +266,11 @@ class gui:
             self.active_menu = self.previous_menu
         elif isinstance(self.active_menu, vfmgui.ListMenu):
             self.active_menu = self.main_menu
-        elif isinstance(self.active_menu, vfmgui.MainMenu):
-            self.running = False
+
+    def __get_button_prompt(self):
+        output = "A  - select"
+        if not isinstance(self.active_menu, vfmgui.MainMenu):
+            output = "{},  B - back".format(output)
+        if isinstance(self.active_menu, vfmgui.ListMenu):
+            output = "{},  L/R - quick scroll".format(output)
+        return output
