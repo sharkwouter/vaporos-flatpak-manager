@@ -1,12 +1,12 @@
-import sys
+import subprocess
 import time
 from io import BytesIO
-
 import requests
 from appdirs import user_cache_dir
 import os
 import vfmflathub
 import threading
+from appdirs import user_data_dir
 
 
 class Application:
@@ -36,6 +36,9 @@ class Application:
                 writer.write(download.content)
                 writer.close()
         return filename
+
+    def launch(self):
+        subprocess.Popen(["gtk-launch", self.flatpak_id])
 
     def install(self):
         if not self.busy:

@@ -254,6 +254,9 @@ class gui:
                 self.installed_application_list.remove(application)
                 self.list_installed_menu.set_application_list(self.installed_application_list)
                 self.__event_button_b()
+            elif selection == vfmgui.ApplicationMenuButtons.launch:
+                self.active_menu.application.launch()
+                self.running = False
 
     def __event_button_b(self):
         if isinstance(self.active_menu, vfmgui.ApplicationMenu):

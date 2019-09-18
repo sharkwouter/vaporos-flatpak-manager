@@ -4,6 +4,7 @@ import pygame
 
 
 class ApplicationMenuButtons:
+    launch = "Launch"
     install = "Install"
     uninstall = "Uninstall"
     back = "Back"
@@ -16,6 +17,7 @@ class ApplicationMenu(Menu):
         self.title = title
 
         self.buttons = []
+        self.buttons.append(vfmgui.Button(ApplicationMenuButtons.launch))
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.install))
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.back))
         self.font_title = vfmgui.Fonts.REGULAR
@@ -45,6 +47,11 @@ class ApplicationMenu(Menu):
 
         # Draw buttons
         for index, button in enumerate(self.buttons):
+            # Only show the launch button if the application is installed
+            if button.text == ApplicationMenuButtons.launch and not self.application.installed:
+                if self.selected == index:
+                    self.selected += 1
+                continue
             # Depending on the state of the application, change the install button to uninstall or the other way around
             if button.text == ApplicationMenuButtons.install and self.application.installed:
                 button.text = ApplicationMenuButtons.uninstall
@@ -53,7 +60,7 @@ class ApplicationMenu(Menu):
             selected = (index == self.selected)
             button_width = screen_width/3
             button_x = screen_width/2-button_width/2
-            button_y = 80+item_height*5+item_height*index
+            button_y = 80+item_height*4+item_height*index
             button.draw(button_x, button_y, button_width, item_height, selected, screen)
 
     def get_selected_button(self):
