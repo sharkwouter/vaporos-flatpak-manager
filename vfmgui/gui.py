@@ -33,7 +33,7 @@ class Axis:
 
 class gui:
 
-    def __init__(self, application_name="VaporOS Flatpak Manager", screen_width=1920, screen_height=1080, fullscreen=False):
+    def __init__(self, application_name="VaporOS Flatpak Manager", screen_width=1920, screen_height=1080, fullscreen=True):
         self.application_name = application_name
         self.__screen_width = screen_width
         self.__screen_height = screen_height
@@ -80,7 +80,7 @@ class gui:
     def __setup_pygame(self):
         pygame.init()
         if self.__fullscreen:
-            self.__screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            self.__screen = pygame.display.set_mode((0, 0), pygame.NOFRAME | pygame.HWSURFACE | pygame.DOUBLEBUF)
             self.__screen_width, self.__screen_height = self.__screen.get_size()
         else:
             self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height), pygame.RESIZABLE)
