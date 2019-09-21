@@ -17,7 +17,7 @@ def get_installed_applications():
         if isinstance(line, bytes):
             line = line.decode("utf-8")
         if meets_version_requirement("1.1.0"):
-            name_description, flatpak_id, version, branch, arch, origin = line.split("\t", 5)
+            name_description, flatpak_id, version, _ = line.split("\t", 3)
             installed_list.append(flatpak_id)
         else:
             flatpak_id = line.strip()
