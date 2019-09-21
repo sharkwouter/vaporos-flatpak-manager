@@ -133,8 +133,11 @@ class gui:
         pygame.draw.rect(self.__screen, vfmgui.Colors.BORDER, border_bottom)
 
         # Draw title
+        title_y = -10
+        if vfmgui.Fonts._font is None:
+            title_y = 0
         title = self.__title_font.render(self.active_menu.title, True, vfmgui.Colors.TEXT_TITLE)
-        title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, -10, title.get_width(), title.get_height())
+        title_rect = pygame.Rect(self.__screen_width/2-title.get_width()/2, title_y, title.get_width(), title.get_height())
         self.__screen.blit(title, title_rect)
 
         # Draw button prompts at the bottom

@@ -5,8 +5,8 @@ pygame.font.init()
 
 
 class Fonts:
-    __font = pygame.font.match_font('liberationsansnarrow')
-    print(__font)
-    REGULAR = pygame.font.Font(__font, 64)
-    SMALL = pygame.font.Font(__font, 32)
-    LARGE = pygame.font.Font(__font, 96)
+    _font = pygame.font.match_font('liberationsansnarrow')
+    print(_font)
+    REGULAR = pygame.font.Font(_font, 64)
+    SMALL = pygame.font.Font(_font, 32)
+    LARGE = pygame.font.Font(_font, 96)
