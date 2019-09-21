@@ -15,6 +15,7 @@ class ApplicationMenu(Menu):
         self.selected = 0
         self.application = application
         self.title = title
+        self.application_description = self.application.description
 
         self.buttons = []
         self.buttons.append(vfmgui.Button(ApplicationMenuButtons.launch))
@@ -33,8 +34,16 @@ class ApplicationMenu(Menu):
         screen_width, screen_height = screen.get_size()
         item_height = (screen_height-160)/7
 
-        # Draw application description
-        text = self.font_small.render(self.application.description, True, vfmgui.Colors.TEXT_SUBTITLE)
+        # Cut off the description if it doesn't fit the screen
+        text = self.font_small.render(self.application_description, True, vfmgui.Colors.TEXT_SUBTITLE)
+        if text.get_width() > screen_width:
+            drop_letters = 3
+            while text.get_width() > screen_width:
+                self.application_description = self.application_description[:-drop_letters] + ".."
+                text = self.font_title.render(self.application_description, True, vfmgui.Colors.TEXT_SUBTITLE)
+                drop_letters += 1
+
+        # Draw the description
         rect_text = pygame.Rect(screen_width / 2 - text.get_width() / 2,
                                 80,
                                 text.get_width(), text.get_height())
