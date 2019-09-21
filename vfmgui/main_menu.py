@@ -1,23 +1,28 @@
 from vfmgui.menu import Menu
 import vfmgui
+import vfmflathub
 
 
 class MainMenuButtons:
     available_applications = "Available Applications"
     installed_applications = "Installed Applications"
+    update_all = "Update All"
     exit = "Exit"
 
 
 class MainMenu(Menu):
     def __init__(self, title):
-        self.__screen_button_limit = 3
+        self.__screen_button_limit = 4
         self.__screen_first_button = 0
         self.selected = 0
         self.title = title
+        self.updating = False
+        self.update_process = None
 
         self.buttons = []
         self.buttons.append(vfmgui.Button(MainMenuButtons.available_applications))
         self.buttons.append(vfmgui.Button(MainMenuButtons.installed_applications))
+        self.buttons.append(vfmgui.Button(MainMenuButtons.update_all))
         self.buttons.append(vfmgui.Button(MainMenuButtons.exit))
 
     def draw(self, screen):
@@ -32,7 +37,30 @@ class MainMenu(Menu):
             button_height = (screen_height-160)/7
             button_x = screen_width/2-button_width/2
             button_y = 80+button_height*2+button_height*button_number
+
+            # Show that we're updating
+            if button.text == vfmgui.MainMenuButtons.update_all and self.updating:
+                self.__update_progress(button)
+
+            # Draw button
             button.draw(button_x, button_y, button_width, button_height, selected, screen)
+
+    def update_all(self):
+        if not self.updating:
+            self.updating = True
+            self.update_process = vfmflathub.update_all()
+
+    def __update_progress(self, button):
+        if self.update_process is not None and self.update_process.poll() is None:
+            button.add_progress()
+        else:
+            button.progress = -1
+            button.done = True
+            if self.update_process.poll() == 0:
+                button.failed = False
+            else:
+                button.failed = True
+                self.updating = False
 
     def get_selected_button(self):
         return self.buttons[self.selected].text

@@ -53,6 +53,8 @@ def meets_version_requirement(version):
 
     return meets_requirements
 
+def update_all():
+    return subprocess.Popen(["flatpak", "update", "--user", "-y"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 def install(application):
     return subprocess.Popen(["flatpak", "install", "--user", "-y", "flathub", application.flatpak_id], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

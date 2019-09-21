@@ -234,6 +234,8 @@ class gui:
                 self.active_menu = self.list_available_menu
             elif selection == vfmgui.MainMenuButtons.installed_applications:
                 self.active_menu = self.list_installed_menu
+            elif selection == vfmgui.MainMenuButtons.update_all:
+                self.active_menu.update_all()
             elif selection == vfmgui.MainMenuButtons.exit:
                 self.running = False
         elif isinstance(self.active_menu, vfmgui.ListMenu):
