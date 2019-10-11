@@ -64,7 +64,6 @@ class Button:
         if self.progress > -1:
             progress_left = 5
             progress_right = 5
-            print(float(width*0.01))
             if self.progress < progress_left:
                 progress_left = self.progress
             if self.progress + progress_right > 100:
